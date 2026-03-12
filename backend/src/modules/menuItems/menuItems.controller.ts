@@ -8,7 +8,7 @@ import {
   Param,
   Query,
 } from "@nestjs/common";
-import { MenuItemsService } from "./menu-items.service";
+import { MenuItemsService } from "./menuItems.service";
 import { Prisma } from "generated/prisma/client";
 
 @Controller("menu-items")
