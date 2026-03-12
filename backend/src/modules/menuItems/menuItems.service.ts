@@ -1,16 +1,24 @@
 import { Injectable } from "@nestjs/common";
 import { PrismaService } from "../../prisma/prisma.service";
 import { Prisma } from "@prisma/client";
+import { CreateMenuItemDto, UpdateMenuItemDto } from "./dto/menuItems.dto";
 
 @Injectable()
 export class MenuItemsService {
   constructor(private prisma: PrismaService) {}
 
-  async create(data: Prisma.MenuItemCreateInput) {
-    return this.prisma.menuItem.create({ data });
+  async create(data: CreateMenuItemDto) {
+    const { categoryId, ...restOfData } = data;
+    return this.prisma.menuItem.create({
+      data: {
+        ...restOfData,
+        category: {
+          connect: { id: categoryId },
+        },
+      },
+    });
   }
 
-  // Handles public searching and filtering
   async findAll(query?: {
     search?: string;
     categoryId?: string;
@@ -27,13 +35,12 @@ export class MenuItemsService {
     }
 
     if (query?.isAvailable !== undefined) {
-      // Convert string query param to boolean
       whereClause.isAvailable = query.isAvailable === "true";
     }
 
     return this.prisma.menuItem.findMany({
       where: whereClause,
-      include: { category: true }, // Returns category details with the item
+      include: { category: true },
     });
   }
 
@@ -44,7 +51,7 @@ export class MenuItemsService {
     });
   }
 
-  async update(id: string, data: Prisma.MenuItemUpdateInput) {
+  async update(id: string, data: UpdateMenuItemDto) {
     return this.prisma.menuItem.update({ where: { id }, data });
   }
 

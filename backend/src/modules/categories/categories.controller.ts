@@ -2,34 +2,39 @@ import {
   Controller,
   Get,
   Post,
-  Put,
   Delete,
   Body,
   Param,
+  UseGuards,
+  Patch,
 } from "@nestjs/common";
 import { CategoriesService } from "./categories.service";
-import { Prisma } from "@prisma/client";
+import { Prisma, Role } from "@prisma/client";
+import { AuthGuard, Roles, RolesGuard } from "../auth/auth.guards";
+import { CreateCategoryDto, UpdateCategoryDto } from "./dto/categories.dto";
 
 @Controller("categories")
 export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
 
-  // Public Route
   @Get()
   async getAllCategories() {
     return this.categoriesService.findAll();
   }
 
-  // Admin Routes (To be protected by AuthGuard later)
   @Post()
-  async createCategory(@Body() data: Prisma.CategoryCreateInput) {
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
+  async createCategory(@Body() data: CreateCategoryDto) {
     return this.categoriesService.create(data);
   }
 
-  @Put(":id")
+  @Patch(":id")
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
   async updateCategory(
     @Param("id") id: string,
-    @Body() data: Prisma.CategoryUpdateInput,
+    @Body() data: UpdateCategoryDto,
   ) {
     return this.categoriesService.update(id, data);
   }
