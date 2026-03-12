@@ -1,0 +1,51 @@
+import {
+  Controller,
+  Get,
+  Post,
+  Put,
+  Delete,
+  Body,
+  Param,
+  Query,
+} from "@nestjs/common";
+import { MenuItemsService } from "./menu-items.service";
+import { Prisma } from "generated/prisma/client";
+
+@Controller("menu-items")
+export class MenuItemsController {
+  constructor(private readonly menuItemsService: MenuItemsService) {}
+
+  // Public Routes
+  @Get()
+  async getAllMenuItems(
+    @Query("search") search?: string,
+    @Query("categoryId") categoryId?: string,
+    @Query("isAvailable") isAvailable?: string,
+  ) {
+    return this.menuItemsService.findAll({ search, categoryId, isAvailable });
+  }
+
+  @Get(":id")
+  async getMenuItem(@Param("id") id: string) {
+    return this.menuItemsService.findOne(id);
+  }
+
+  // Admin Routes (To be protected by AuthGuard later)
+  @Post()
+  async createMenuItem(@Body() data: Prisma.MenuItemCreateInput) {
+    return this.menuItemsService.create(data);
+  }
+
+  @Put(":id")
+  async updateMenuItem(
+    @Param("id") id: string,
+    @Body() data: Prisma.MenuItemUpdateInput,
+  ) {
+    return this.menuItemsService.update(id, data);
+  }
+
+  @Delete(":id")
+  async deleteMenuItem(@Param("id") id: string) {
+    return this.menuItemsService.remove(id);
+  }
+}
