@@ -7,9 +7,11 @@ import {
   Body,
   Param,
   Query,
+  UseGuards,
 } from "@nestjs/common";
 import { MenuItemsService } from "./menuItems.service";
-import { Prisma } from "@prisma/client";
+import { Prisma, Role } from "@prisma/client";
+import { AuthGuard, Roles, RolesGuard } from "../auth/auth.guards";
 
 @Controller("menu-items")
 export class MenuItemsController {
@@ -32,6 +34,8 @@ export class MenuItemsController {
 
   // Admin Routes (To be protected by AuthGuard later)
   @Post()
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
   async createMenuItem(@Body() data: Prisma.MenuItemCreateInput) {
     return this.menuItemsService.create(data);
   }
