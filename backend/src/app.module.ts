@@ -4,6 +4,8 @@ import { PrismaModule } from "./prisma/prisma.module";
 import { UsersModule } from "./modules/users/users.module";
 import { CategoryModule } from "./modules/categories/categories.module";
 import { MenuItemsModule } from "./modules/menuItems/menuItems.module";
+import { OrdersModule } from "./modules/orders/orders.module";
+import { AuthModule } from "./modules/auth/auth.module";
 
 @Module({
   imports: [
@@ -12,8 +14,10 @@ import { MenuItemsModule } from "./modules/menuItems/menuItems.module";
     }),
     PrismaModule,
     UsersModule,
+    AuthModule,
     CategoryModule,
     MenuItemsModule,
+    OrdersModule
   ],
   controllers: [],
   providers: [],
