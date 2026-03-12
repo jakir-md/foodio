@@ -1,7 +1,7 @@
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 import { PrismaModule } from "./prisma/prisma.module";
-import { UsersModule } from "./modules/users/user.module";
+import { UsersModule } from "./modules/users/users.module";
 import { CategoryModule } from "./modules/categories/categories.module";
 import { MenuItemsModule } from "./modules/menuItems/menuItems.module";
 

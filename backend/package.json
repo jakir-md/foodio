@@ -1,4 +1,14 @@
 {
+  "name": "foodio-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/main.js",
+  "scripts": {
+    "build": "nest build",
+    "start": "nest start",
+    "start:dev": "nest start --watch",
+    "start:prod": "node dist/main"
+  },
   "devDependencies": {
     "prisma": "^7.5.0"
   },
@@ -9,6 +19,7 @@
     "@nestjs/platform-express": "^11.1.16",
     "@prisma/adapter-pg": "^7.5.0",
     "@prisma/client": "^7.5.0",
+    "dotenv": "^17.3.1",
     "pg": "^8.20.0",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.2"

@@ -8,7 +8,7 @@ import {
   Param,
 } from "@nestjs/common";
 import { CategoriesService } from "./categories.service";
-import { Prisma } from "../../../generated/prisma/client";
+import { Prisma } from "@prisma/client";
 
 @Controller("categories")
 export class CategoriesController {
