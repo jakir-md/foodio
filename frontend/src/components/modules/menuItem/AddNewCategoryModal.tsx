@@ -10,24 +10,25 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-
-export default function AddCategoryModal() {
-  const [open, setOpen] = useState(false);
+interface INewCategoryModalProps {
+  open: boolean;
+  onClose: (value: boolean) => void;
+}
+export default function AddNewCategoryModal({
+  open,
+  onClose,
+}: INewCategoryModalProps) {
   const [name, setName] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setOpen(false);
+    onClose(false);
     setName("");
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button className="bg-[#13322B] text-white hover:bg-[#1a453b]">
-          Add Category
-        </Button>
-      </DialogTrigger>
+    <Dialog open={open} onOpenChange={onClose}>
+      <DialogTrigger asChild></DialogTrigger>
 
       <DialogContent className="sm:max-w-106.25 p-6 bg-[#FAFAF9]">
         <DialogHeader className="mb-2">

@@ -33,20 +33,15 @@ interface INewItemModalProps {
   open: boolean;
   onClose: () => void;
 }
-export default function AddNewItemModal() {
-  const [open, setOpen] = useState(false);
+export default function AddNewItemModal({ open, onClose }: INewItemModalProps) {
   const [selectedFile, setSelectedFile] = useState<string | null>(
     "Dish_image.png",
   );
   const [isAvailable, setIsAvailable] = useState(true);
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button className="bg-[#13322B] text-white hover:bg-[#1a453b]">
-          Add New Item
-        </Button>
-      </DialogTrigger>
+    <Dialog open={open} onOpenChange={onClose}>
+      <DialogTrigger asChild></DialogTrigger>
 
       <DialogContent className="sm:max-w-125 p-6 bg-[#FAFAF9]">
         <DialogHeader className="mb-4">

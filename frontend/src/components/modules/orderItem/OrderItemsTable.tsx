@@ -5,8 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import Toggler from "./Toggler";
 import ManagementTable from "@/components/shared/MangementTable";
-import { IMenuItem, menuItemsColumns } from "./menuItemsColumn";
-import AddNewItemModal from "./AddNewItemModal";
+import ManagementPageHeader from "@/components/shared/ManagementPageHeader";
 
 interface MenuItemsTableProps {
   menus: IMenuItem[];
@@ -58,12 +57,7 @@ const MenuItemsTable = ({
 
   return (
     <>
-      <Toggler
-        handleOnclick={() => setAddMenu(true)}
-        activeTab={activeTab}
-        handleToggle={handleToggle}
-        title="Item"
-      />
+      <ManagementPageHeader title="Order Mangement" />
       <ManagementTable
         data={menus}
         columns={menuItemsColumns}
@@ -71,17 +65,6 @@ const MenuItemsTable = ({
         onDelete={handleDelete}
         getRowKey={(admin) => admin.id!}
         emptyMessage="No admins found"
-      />
-
-      {/* Edit Admin Form Dialog */}
-      <AddNewItemModal
-        open={addMenu}
-        onClose={() => setAddMenu(false)}
-        // admin={editingAdmin!}
-        // onSuccess={() => {
-        //   setEditingAdmin(null);
-        //   handleRefresh();
-        // }}
       />
 
       {/* Delete Confirmation Dialog */}

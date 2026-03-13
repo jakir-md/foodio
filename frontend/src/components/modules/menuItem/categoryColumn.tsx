@@ -4,9 +4,6 @@ import { Pencil, Trash2 } from "lucide-react";
 export interface ICategory {
   id: string;
   name: string;
-  category: string;
-  price: number;
-  isAvailable: boolean;
 }
 
 export const categoryColumns: Column<ICategory>[] = [
