@@ -29,6 +29,10 @@ const DUMMY_CATEGORIES = [
   { id: "4", name: "Beverages" },
 ];
 
+interface INewItemModalProps {
+  open: boolean;
+  onClose: () => void;
+}
 export default function AddNewItemModal() {
   const [open, setOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState<string | null>(
@@ -44,7 +48,7 @@ export default function AddNewItemModal() {
         </Button>
       </DialogTrigger>
 
-      <DialogContent className="sm:max-w-[500px] p-6 bg-[#FAFAF9]">
+      <DialogContent className="sm:max-w-125 p-6 bg-[#FAFAF9]">
         <DialogHeader className="mb-4">
           <DialogTitle className="text-xl font-bold text-[#13322B]">
             Add New Item
@@ -109,7 +113,7 @@ export default function AddNewItemModal() {
             </Label>
             <Textarea
               id="description"
-              className="min-h-[100px] bg-white border-gray-200 focus-visible:ring-[#13322B] resize-none"
+              className="min-h-25 bg-white border-gray-200 focus-visible:ring-[#13322B] resize-none"
             />
           </div>
 
