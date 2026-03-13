@@ -6,13 +6,13 @@ import {
   isValidRedirectForRole,
   UserRole,
 } from "@/lib/auth-utils";
-import { zodValidator } from "@/lib/zodValidator";
 import { parse } from "cookie";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { redirect } from "next/navigation";
 import { setCookie } from "./tokenHandlers";
 import { serverFetch } from "@/lib/server-fetch";
 import { loginSchema } from "@/zod/authentication.validation";
+import { zodValidator } from "@/lib/zodvalidator";
 
 export const loginUser = async (
   _currentState: any,

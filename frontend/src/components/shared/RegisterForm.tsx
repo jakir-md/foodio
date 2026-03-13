@@ -1,10 +1,10 @@
 "use client";
 
 import { useActionState } from "react";
-import { registerAction } from "@/actions/auth";
+import { registerUser } from "@/services/auth/registerUser";
 
 export default function RegisterForm() {
-  const [state, formAction, isPending] = useActionState(registerAction, {
+  const [state, formAction, isPending] = useActionState(registerUser, {
     message: null,
   });
 
