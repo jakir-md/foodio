@@ -1,4 +1,5 @@
 import { NavSection } from "@/types/dashboard.interface";
+import { Menu, ShoppingBag } from "lucide-react";
 
 export const adminNavItems: NavSection[] = [
   {
@@ -7,13 +8,13 @@ export const adminNavItems: NavSection[] = [
       {
         title: "Menu Items",
         href: "/admin/dashboard/menu-items",
-        icon: "Hamburger",
+        icon: Menu,
         roles: ["ADMIN"],
       },
       {
         title: "Orders",
         href: "/admin/dashboard/orders",
-        icon: "Stethoscope",
+        icon: ShoppingBag,
         roles: ["ADMIN"],
       },
     ],

@@ -6,7 +6,7 @@ export default function HeroSection() {
         <div className="w-[45%] h-full bg-[#FFF9F0]"></div>
       </div>
 
-      <main className="relative z-10 max-w-[1440px] mx-auto px-6 md:px-12 pt-40 pb-20 flex flex-col lg:flex-row items-center min-h-screen">
+      <main className="relative z-10 max-w-360 mx-auto px-6 md:px-12 pt-40 pb-20 flex flex-col lg:flex-row items-center min-h-screen">
         <div className="w-full lg:w-[55%] pr-10">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#FFF9F0] text-sm text-[#13322B] font-medium rounded-md mb-8">
             <span className="text-emerald-600">🧾</span> Food Ordering Service
@@ -42,8 +42,8 @@ export default function HeroSection() {
         </div>
 
         <div className="w-full lg:w-[45%] relative mt-16 lg:mt-0 flex justify-center">
-          <div className="relative w-full max-w-[500px] aspect-square rounded-full shadow-2xl overflow-hidden bg-white/50 backdrop-blur-sm">
-            <div className="w-full h-full rounded-full border-[20px] border-white overflow-hidden">
+          <div className="relative w-full max-w-125 aspect-square rounded-full shadow-2xl overflow-hidden bg-white/50 backdrop-blur-sm">
+            <div className="w-full h-full rounded-full border-20 border-white overflow-hidden">
               <div className="w-full h-full bg-gray-200 flex items-center justify-center text-gray-400 text-sm">
                 [ Insert plate image here ]
               </div>
