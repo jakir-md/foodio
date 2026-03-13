@@ -7,7 +7,7 @@ export default function Navbar() {
   const navLinks = [
     { name: "Home", href: "/" },
     { name: "Food Menu", href: "/food-menu" },
-    { name: "My Orders", href: "/orders" },
+    { name: "My Orders", href: "/my-orders" },
   ];
   return (
     <header className="absolute top-0 left-0 w-full z-50 flex justify-between items-center px-6 md:px-12 py-6 max-w-360 mx-auto right-0">
