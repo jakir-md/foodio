@@ -7,12 +7,18 @@ export interface IOrder {
   date: string;
   customerName: string;
   total: number;
+  address: string;
+  items: {
+    quantity: number;
+    price: number;
+    name: string;
+  }[];
   status: OrderStatus;
 }
 
-export const orderColumns: Column<IOrder>[] = [
+export const orderItemsColumns: Column<IOrder>[] = [
   {
-    header: "Order ID",
+    header: "Order Id",
     accessor: (order) => (
       <span className="text-sm text-gray-700">{order.id}</span>
     ),

@@ -3,27 +3,19 @@
 import DeleteConfirmationDialog from "@/components/shared/DeleteConfirmationDialog";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
-import Toggler from "./Toggler";
 import ManagementTable from "@/components/shared/MangementTable";
 import ManagementPageHeader from "@/components/shared/ManagementPageHeader";
+import { IOrder, orderItemsColumns, OrderStatus } from "./orderItemsColumn";
+import OrderDetailsModal from "./OrderDetailsModal";
 
 interface MenuItemsTableProps {
-  menus: IMenuItem[];
-  activeTab: string;
-  handleToggle: (tab: "categories" | "menuItems") => void;
+  orders: IOrder[];
 }
 
-const MenuItemsTable = ({
-  menus,
-  activeTab,
-  handleToggle,
-}: MenuItemsTableProps) => {
+const OrderItemsTable = ({ orders }: MenuItemsTableProps) => {
   const router = useRouter();
   const [, startTransition] = useTransition();
-  const [deletingMenu, setDeletingMenu] = useState<IMenuItem | null>(null);
-  const [editingMenu, setEditingMenu] = useState<IMenuItem | null>(null);
-  const [addMenu, setAddMenu] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(true);
+  const [viewOrderDetails, setViewOrderDetails] = useState<IOrder | null>(null);
 
   const handleRefresh = () => {
     startTransition(() => {
@@ -31,21 +23,19 @@ const MenuItemsTable = ({
     });
   };
 
-  const handleEdit = (admin: IMenuItem) => {
-    setEditingMenu(admin);
+  const handleStatus = (orderId: string, status: OrderStatus) => {
+    try {
+    } catch (error) {}
   };
 
-  const handleDelete = (admin: IMenuItem) => {
-    setDeletingMenu(admin);
+  const handleView = (order: IOrder) => {
+    setViewOrderDetails(order);
   };
 
   const confirmDelete = async () => {
-    if (!deletingMenu) return;
-
     // setIsDeleting(true);
     // const result = await softDeleteAdmin(deletingAdmin.id!);
     // setIsDeleting(false);
-
     // if (result.success) {
     //   toast.success(result.message || "Menu deleted successfully");
     //   setDeletingMenu(null);
@@ -59,25 +49,31 @@ const MenuItemsTable = ({
     <>
       <ManagementPageHeader title="Order Mangement" />
       <ManagementTable
-        data={menus}
-        columns={menuItemsColumns}
-        onEdit={handleEdit}
-        onDelete={handleDelete}
-        getRowKey={(admin) => admin.id!}
-        emptyMessage="No admins found"
+        data={orders}
+        columns={orderItemsColumns}
+        onView={handleView}
+        // onDelete={handleDelete}
+        getRowKey={(order) => order.id!}
+        emptyMessage="No Order Found"
       />
 
       {/* Delete Confirmation Dialog */}
-      <DeleteConfirmationDialog
+      {/* <DeleteConfirmationDialog
         open={!!deletingMenu}
         onOpenChange={(open) => !open && setDeletingMenu(null)}
         onConfirm={confirmDelete}
         title="Delete Menu"
         description={`Are you sure you want to delete ${deletingMenu?.name}? This action cannot be undone.`}
         isDeleting={isDeleting}
+      /> */}
+
+      <OrderDetailsModal
+        open={!!viewOrderDetails}
+        order={viewOrderDetails!}
+        onClose={() => setViewOrderDetails(null)}
       />
     </>
   );
 };
 
-export default MenuItemsTable;
+export default OrderItemsTable;
