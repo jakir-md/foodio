@@ -1,7 +1,8 @@
+// "use client"
 import DashboardSidebar from "@/components/modules/dashboard/DashboardSidebar";
 import React from "react";
 
-export const dynamic = "force-dynamic";
+// export const dynamic = "force-dynamic";
 
 const AdminDashboardLayout = async ({
   children,

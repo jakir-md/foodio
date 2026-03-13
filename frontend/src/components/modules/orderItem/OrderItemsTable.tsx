@@ -13,6 +13,7 @@ interface MenuItemsTableProps {
 }
 
 const OrderItemsTable = ({ orders }: MenuItemsTableProps) => {
+  console.log({ orders });
   const router = useRouter();
   const [, startTransition] = useTransition();
   const [viewOrderDetails, setViewOrderDetails] = useState<IOrder | null>(null);
@@ -68,8 +69,8 @@ const OrderItemsTable = ({ orders }: MenuItemsTableProps) => {
       /> */}
 
       <OrderDetailsModal
-        open={!!viewOrderDetails}
         order={viewOrderDetails!}
+        open={false}
         onClose={() => setViewOrderDetails(null)}
       />
     </>

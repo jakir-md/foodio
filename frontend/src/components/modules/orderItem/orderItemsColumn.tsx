@@ -1,3 +1,4 @@
+"use client";
 import { Column } from "@/components/shared/MangementTable";
 
 export type OrderStatus = "Pending" | "Preparing" | "Ready" | "Completed";
