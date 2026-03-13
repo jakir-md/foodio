@@ -73,12 +73,4 @@ export const orderItemsColumns: Column<IOrder>[] = [
       </div>
     ),
   },
-  {
-    header: "Actions",
-    accessor: (order) => (
-      <button className="bg-gray-100 hover:bg-gray-200 text-gray-800 text-xs font-medium px-4 py-1.5 rounded-md transition-colors">
-        Details
-      </button>
-    ),
-  },
 ];

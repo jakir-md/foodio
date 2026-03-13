@@ -127,9 +127,7 @@ function ManagementTable<T>({
                   )}
                 </TableHead>
               ))}
-              {hasActions && (
-                <TableHead className="w-17.5">Actions</TableHead>
-              )}
+              {hasActions && <TableHead className="w-17.5">Actions</TableHead>}
             </TableRow>
           </TableHeader>
 
@@ -155,37 +153,30 @@ function ManagementTable<T>({
                   ))}
                   {hasActions && (
                     <TableCell>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="icon">
-                            <MoreHorizontal className="h-4 w-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          {onView && (
-                            <DropdownMenuItem onClick={() => onView(item)}>
-                              <Eye className="mr-2 h-4 w-4" />
-                              View
-                            </DropdownMenuItem>
-                          )}
-                          {onEdit && (
-                            <DropdownMenuItem onClick={() => onEdit(item)}>
-                              <Edit className="mr-2 h-4 w-4" />
-                              Edit
-                            </DropdownMenuItem>
-                          )}
-                          {onDelete && (
-                            <DropdownMenuItem
-                              onClick={() => onDelete(item)}
-                              className="text-destructive"
-                            >
-                              <Trash className="mr-2 h-4 w-4" />
-                              Delete
-                            </DropdownMenuItem>
-                          )}
-                        </DropdownMenuContent>
-                      </DropdownMenu>
+                      {onView && (
+                        <Button
+                          onClick={() => onView(item)}
+                          className="bg-gray-100 hover:bg-gray-200 text-gray-800 text-xs font-medium px-4 py-1.5 rounded-md transition-colors"
+                        >
+                          Details
+                        </Button>
+                      )}
                     </TableCell>
+                    /* {onEdit && (
+                        <DropdownMenuItem onClick={() => onEdit(item)}>
+                          <Edit className="mr-2 h-4 w-4" />
+                          Edit
+                        </DropdownMenuItem>
+                      )}
+                      {onDelete && (
+                        <DropdownMenuItem
+                          onClick={() => onDelete(item)}
+                          className="text-destructive"
+                        >
+                          <Trash className="mr-2 h-4 w-4" />
+                          Delete
+                        </DropdownMenuItem>
+                      )} */
                   )}
                 </TableRow>
               ))

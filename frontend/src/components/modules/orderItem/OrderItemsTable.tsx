@@ -30,6 +30,7 @@ const OrderItemsTable = ({ orders }: MenuItemsTableProps) => {
   };
 
   const handleView = (order: IOrder) => {
+    console.log({ order });
     setViewOrderDetails(order);
   };
 
@@ -70,7 +71,7 @@ const OrderItemsTable = ({ orders }: MenuItemsTableProps) => {
 
       <OrderDetailsModal
         order={viewOrderDetails!}
-        open={false}
+        open={!!viewOrderDetails}
         onClose={() => setViewOrderDetails(null)}
       />
     </>

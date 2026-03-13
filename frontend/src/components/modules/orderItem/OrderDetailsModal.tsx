@@ -19,6 +19,7 @@ export default function OrderDetailsModal({
   open,
   onClose,
 }: OrderDetailsModalProps) {
+  if (!order) return null;
   return (
     <div>
       <Dialog open={open} onOpenChange={onClose}>
