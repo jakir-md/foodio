@@ -7,17 +7,20 @@ import Toggler from "./Toggler";
 import ManagementTable from "@/components/shared/MangementTable";
 import { IMenuItem, menuItemsColumns } from "./menuItemsColumn";
 import AddNewItemModal from "./AddNewItemModal";
+import { ICategory } from "./categoryColumn";
 
 interface MenuItemsTableProps {
   menus: IMenuItem[];
   activeTab: string;
   handleToggle: (tab: "categories" | "menuItems") => void;
+  categories: ICategory[];
 }
 
 const MenuItemsTable = ({
   menus,
   activeTab,
   handleToggle,
+  categories,
 }: MenuItemsTableProps) => {
   const router = useRouter();
   const [, startTransition] = useTransition();
@@ -70,18 +73,17 @@ const MenuItemsTable = ({
         onEdit={handleEdit}
         onDelete={handleDelete}
         getRowKey={(admin) => admin.id!}
-        emptyMessage="No admins found"
+        emptyMessage="No menu items found"
       />
 
       {/* Edit Admin Form Dialog */}
       <AddNewItemModal
         open={addMenu}
         onClose={() => setAddMenu(false)}
-        // admin={editingAdmin!}
-        // onSuccess={() => {
-        //   setEditingAdmin(null);
-        //   handleRefresh();
-        // }}
+        categories={categories}
+        onSuccess={() => {
+          handleRefresh();
+        }}
       />
 
       {/* Delete Confirmation Dialog */}

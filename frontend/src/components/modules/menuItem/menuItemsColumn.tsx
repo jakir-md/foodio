@@ -4,7 +4,7 @@ import { Pencil, Trash2 } from "lucide-react";
 export interface IMenuItem {
   id: string;
   name: string;
-  category: string;
+  category: { name: string };
   price: number;
   isAvailable: boolean;
 }
@@ -19,7 +19,7 @@ export const menuItemsColumns: Column<IMenuItem>[] = [
   {
     header: "Category",
     accessor: (item) => (
-      <span className="text-sm text-gray-700">{item.category}</span>
+      <span className="text-sm text-gray-700">{item.category.name}</span>
     ),
   },
   {

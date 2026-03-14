@@ -9,6 +9,7 @@ export class MenuItemsService {
 
   async create(data: CreateMenuItemDto) {
     const { categoryId, ...restOfData } = data;
+    console.log("categoryId from services", categoryId);
     return this.prisma.menuItem.create({
       data: {
         ...restOfData,

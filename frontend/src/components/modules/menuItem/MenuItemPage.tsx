@@ -15,7 +15,7 @@ export default function MenuItemPage({ menus, categories }: IMenuItemsProps) {
   const [activeTab, setActiveTab] = useState<"menuItems" | "categories">(
     "menuItems",
   );
-  console.log("menu items found", activeTab);
+  console.log({ menus });
   return (
     <>
       <ManagementPageHeader title="Menu Items" />
@@ -24,6 +24,7 @@ export default function MenuItemPage({ menus, categories }: IMenuItemsProps) {
           menus={menus}
           handleToggle={setActiveTab}
           activeTab={activeTab}
+          categories={categories}
         />
       )}
       {activeTab === "categories" && (

@@ -17,13 +17,20 @@ export const addNewMenu = async (
         inputs: rawData,
       };
     }
-    const res = await serverFetch.post("/menu", {
-      headers: {
-        "Content-Type": "application/json",
-      },
+
+    const { image, ...restData } = rawData;
+    const newFormData = new FormData();
+    newFormData.append("data", JSON.stringify(restData));
+    if (formData.get("image")) {
+      newFormData.append("file", formData.get("image") as Blob);
+    }
+
+    const res = await serverFetch.post("/menu-items", {
+      body: newFormData,
     });
 
     const result = await res.json();
+    console.log("result from menu item", result);
     return result;
   } catch (error: any) {
     // Re-throw NEXT_REDIRECT errors so Next.js can handle them
@@ -41,8 +48,9 @@ export const addNewMenu = async (
 
 export const getAllMenu = async (): Promise<any> => {
   try {
-    const res = await serverFetch.get("/menu");
+    const res = await serverFetch.get("/menu-items");
     const result = await res.json();
+    console.log({ result });
     return result;
   } catch (error: any) {
     // Re-throw NEXT_REDIRECT errors so Next.js can handle them

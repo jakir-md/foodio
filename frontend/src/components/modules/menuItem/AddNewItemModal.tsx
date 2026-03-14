@@ -1,11 +1,7 @@
 "use client";
+
 import { Upload, X } from "lucide-react";
-import { useActionState, useRef, useState } from "react";
-const DUMMY_CATEGORIES = [
-  { id: "cat_1", name: "Beverages" },
-  { id: "cat_2", name: "Desserts" },
-  { id: "cat_3", name: "Main Course" },
-];
+import { useActionState, useEffect, useRef, useState } from "react";
 
 import {
   Dialog,
@@ -28,12 +24,21 @@ import { Button } from "@/components/ui/button";
 import { Field, FieldLabel } from "@/components/ui/field";
 import InputFieldError from "@/components/shared/InputFieldError";
 import { addNewMenu } from "@/services/menu/menu.service";
+import { ICategory } from "./categoryColumn";
 
 interface INewItemModalProps {
   open: boolean;
   onClose: () => void;
+  categories: ICategory[];
+  onSuccess: () => void;
 }
-export default function AddNewItemModal({ open, onClose }: INewItemModalProps) {
+
+export default function AddNewItemModal({
+  open,
+  onClose,
+  categories,
+  onSuccess,
+}: INewItemModalProps) {
   const [selectedFile, setSelectedFile] = useState<string | null>(
     "Dish_image.png",
   );
@@ -44,9 +49,14 @@ export default function AddNewItemModal({ open, onClose }: INewItemModalProps) {
     success: false,
   });
 
+  useEffect(() => {
+    if (state.success) {
+      onClose();
+      onSuccess();
+    }
+  }, [state]);
   const [selectedFileName, setSelectedFileName] = useState<string | null>(null);
   const [isAvailable, setIsAvailable] = useState(true);
-
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const triggerFileInput = () => {
@@ -123,14 +133,14 @@ export default function AddNewItemModal({ open, onClose }: INewItemModalProps) {
               Category
             </FieldLabel>
             <Select
-              name="category"
-              defaultValue={state?.inputs?.category || DUMMY_CATEGORIES[0].id}
+              name="categoryId"
+              defaultValue={state?.inputs?.category || categories[0].id}
             >
               <SelectTrigger className="w-full bg-white border-gray-200 focus:ring-[#13322B]">
                 <SelectValue placeholder="Select category" />
               </SelectTrigger>
               <SelectContent>
-                {DUMMY_CATEGORIES.map((category) => (
+                {categories.map((category) => (
                   <SelectItem key={category.id} value={category.id}>
                     {category.name}
                   </SelectItem>
@@ -192,7 +202,7 @@ export default function AddNewItemModal({ open, onClose }: INewItemModalProps) {
                 <button
                   type="button"
                   onClick={removeFile}
-                  className="text-gray-400 hover:text-red-500 transition-colors flex-shrink-0"
+                  className="text-gray-400 hover:text-red-500 transition-colors shrink-0"
                 >
                   <X className="w-4 h-4" />
                 </button>

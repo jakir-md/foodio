@@ -8,11 +8,16 @@ import {
   Param,
   Query,
   UseGuards,
+  UseInterceptors,
+  UploadedFile,
+  BadRequestException,
 } from "@nestjs/common";
 import { MenuItemsService } from "./menuItems.service";
 import { Prisma, Role } from "@prisma/client";
 import { AuthGuard, Roles, RolesGuard } from "../auth/auth.guards";
 import { CreateMenuItemDto, UpdateMenuItemDto } from "./dto/menuItems.dto";
+import { FileInterceptor } from "@nestjs/platform-express";
+import { storage } from "src/config/cloudinary.config";
 
 @Controller("menu-items")
 export class MenuItemsController {
@@ -24,7 +29,15 @@ export class MenuItemsController {
     @Query("categoryId") categoryId?: string,
     @Query("isAvailable") isAvailable?: string,
   ) {
-    return this.menuItemsService.findAll({ search, categoryId, isAvailable });
+    const result = await this.menuItemsService.findAll({
+      search,
+      categoryId,
+      isAvailable,
+    });
+    return {
+      data: result,
+      success: true,
+    };
   }
 
   @Get(":id")
@@ -35,8 +48,36 @@ export class MenuItemsController {
   @Post()
   @UseGuards(AuthGuard, RolesGuard)
   @Roles(Role.ADMIN)
-  async createMenuItem(@Body() data: CreateMenuItemDto) {
-    return this.menuItemsService.create(data);
+  @UseInterceptors(FileInterceptor("file", { storage: storage }))
+  async createMenuItem(
+    @Body() body: any,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    if (!file) {
+      throw new BadRequestException("Image file is required.");
+    }
+    const imageUrl = file.path;
+    console.log({ imageUrl });
+
+    const parsedData = JSON.parse(body.data);
+
+    // Now extract the fields from the parsed object!
+    const productData = {
+      name: parsedData.name,
+      price: parseFloat(String(parsedData.price)),
+      description: parsedData.description,
+      categoryId: parsedData.categoryId,
+      isAvailable: String(parsedData.isAvailable) === "true",
+      image: imageUrl,
+    };
+
+    const result = await this.menuItemsService.create(productData);
+
+    return {
+      success: true,
+      message: "Product created successfully",
+      data: result,
+    };
   }
 
   @Put(":id")
