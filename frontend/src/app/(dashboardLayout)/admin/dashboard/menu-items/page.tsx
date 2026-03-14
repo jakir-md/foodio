@@ -1,6 +1,7 @@
 import MenuItemPage from "@/components/modules/menuItem/MenuItemPage";
+import { getAllCategories } from "@/services/category/category.service";
 
-export default function MenuItems() {
+export default async function MenuItems() {
   const DUMMY_MENU_ITEMS = [
     {
       id: "1",
@@ -65,9 +66,11 @@ export default function MenuItems() {
       isAvailable: false,
     },
   ];
+  const categories = await getAllCategories();
+  console.log({ categories });
   return (
     <div>
-      <MenuItemPage menus={DUMMY_MENU_ITEMS} categories={DUMMY_CATEGORIES} />
+      <MenuItemPage menus={DUMMY_MENU_ITEMS} categories={categories.data} />
     </div>
   );
 }

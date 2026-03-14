@@ -4,10 +4,6 @@ export class CreateCategoryDto {
   @IsString()
   @IsNotEmpty({ message: "Category name is strictly required" })
   name: string;
-
-  @IsString()
-  @IsOptional()
-  description?: string;
 }
 
 export class UpdateCategoryDto {

@@ -19,14 +19,19 @@ export class CategoriesController {
 
   @Get()
   async getAllCategories() {
-    return this.categoriesService.findAll();
+    const result = await this.categoriesService.findAll();
+    return {
+      data: result,
+      success: true,
+    };
   }
 
   @Post()
   @UseGuards(AuthGuard, RolesGuard)
   @Roles(Role.ADMIN)
   async createCategory(@Body() data: CreateCategoryDto) {
-    return this.categoriesService.create(data);
+    const result = await this.categoriesService.create(data);
+    return { data: result, success: true };
   }
 
   @Patch(":id")

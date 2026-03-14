@@ -2,9 +2,21 @@
 "use server";
 
 import { serverFetch } from "@/lib/server-fetch";
+import { zodValidator } from "@/lib/zodvalidator";
+import { createMenuItemSchema } from "@/zod/menuItem.validation";
 
-export const addNewMenu = async (): Promise<any> => {
+export const addNewMenu = async (
+  _prevState: any,
+  formData: FormData,
+): Promise<any> => {
+  const rawData = Object.fromEntries(formData.entries());
   try {
+    if (zodValidator(rawData, createMenuItemSchema).success === false) {
+      return {
+        ...zodValidator(rawData, createMenuItemSchema),
+        inputs: rawData,
+      };
+    }
     const res = await serverFetch.post("/menu", {
       headers: {
         "Content-Type": "application/json",

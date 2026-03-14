@@ -8,6 +8,8 @@ import ManagementTable from "@/components/shared/MangementTable";
 import { IMenuItem } from "./menuItemsColumn";
 import { categoryColumns, ICategory } from "./categoryColumn";
 import AddNewCategoryModal from "./AddNewCategoryModal";
+import { addNewCategory } from "@/services/category/category.service";
+import { toast } from "sonner";
 
 interface CategoryTableProps {
   menus: ICategory[];
@@ -22,9 +24,11 @@ const CategoryTable = ({
 }: CategoryTableProps) => {
   const router = useRouter();
   const [, startTransition] = useTransition();
+  const [categoryName, setCategoryName] = useState("");
   const [deletingCateogry, setDeletingCategory] = useState<ICategory | null>(
     null,
   );
+
   const [editingCategory, setEditingCategory] = useState<ICategory | null>(
     null,
   );
@@ -37,6 +41,24 @@ const CategoryTable = ({
     });
   };
 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log("add cat hit");
+    try {
+      const result = await addNewCategory(categoryName);
+      console.log({ result });
+      if (result.success) {
+        toast.success("Category Added Successfully.");
+        setAddCategory(false);
+        handleRefresh();
+      } else {
+        toast.error(result.message);
+      }
+    } catch (error) {
+      toast.error("Category addition Failed.");
+      console.log("Category addition errror", error);
+    }
+  };
   const handleEdit = (admin: IMenuItem) => {
     setEditingCategory(admin);
   };
@@ -82,6 +104,9 @@ const CategoryTable = ({
       <AddNewCategoryModal
         open={addCategory}
         onClose={() => setAddCategory(false)}
+        onSubmit={handleSubmit}
+        setCategoryName={setCategoryName}
+        categoryName={categoryName}
         // admin={editingAdmin!}
         // onSuccess={() => {
         //   setEditingAdmin(null);

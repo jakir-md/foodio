@@ -2,23 +2,39 @@
 "use server";
 
 import { serverFetch } from "@/lib/server-fetch";
+import { revalidateTag } from "next/cache";
 
-export const addNewCategory = async (): Promise<any> => {
+export const addNewCategory = async (name: string): Promise<any> => {
   try {
     const res = await serverFetch.post("/categories", {
+      body: JSON.stringify({ name }),
       headers: {
         "Content-Type": "application/json",
       },
     });
 
     const result = await res.json();
+    if (res.ok || result.success) {
+      revalidateTag("categories", { expire: 0 });
+    }
     return result;
   } catch (error: any) {
     // Re-throw NEXT_REDIRECT errors so Next.js can handle them
     if (error?.digest?.startsWith("NEXT_REDIRECT")) {
       throw error;
     }
-    console.log(error);
+    const errorMessage =
+      error?.response?.message ||
+      error?.message ||
+      "Failed to create category. Please try again.";
+
+    // 2. Return the clean object for your frontend to display
+    return {
+      success: false,
+      data: [],
+      message: errorMessage,
+    };
+
     return {
       data: [],
       success: false,
@@ -26,6 +42,7 @@ export const addNewCategory = async (): Promise<any> => {
     };
   }
 };
+
 export const deleteCategory = async (): Promise<any> => {
   try {
     const res = await serverFetch.delete("/categories", {
@@ -73,9 +90,11 @@ export const editCategory = async (): Promise<any> => {
   }
 };
 
-export const getAllCategory = async (): Promise<any> => {
+export const getAllCategories = async (): Promise<any> => {
   try {
-    const res = await serverFetch.get("/categories");
+    const res = await serverFetch.get("/categories", {
+      next: { tags: ["categories"] },
+    });
     const result = await res.json();
     return result;
   } catch (error: any) {

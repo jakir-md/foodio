@@ -18,16 +18,30 @@ export class AuthGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
-    const token = request.headers.authorization?.split(" ")[1];
 
-    if (!token) throw new UnauthorizedException("Please log in first.");
+    let token = request.headers.authorization?.split(" ")[1];
+
+    if (!token && request.headers.cookie) {
+      const cookies = request.headers.cookie.split(";");
+      const accessCookie = cookies.find((c) =>
+        c.trim().startsWith("accessToken="),
+      );
+
+      if (accessCookie) {
+        token = accessCookie.split("=")[1];
+      }
+    }
+
+    if (!token) {
+      throw new UnauthorizedException("Please log in first.");
+    }
 
     try {
       request["user"] = await this.jwtService.verifyAsync(token, {
         secret: process.env.JWT_SECRET,
       });
       return true;
-    } catch {
+    } catch (error) {
       throw new UnauthorizedException("Invalid or expired token.");
     }
   }

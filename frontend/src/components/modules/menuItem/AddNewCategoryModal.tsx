@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import {
   Dialog,
   DialogContent,
@@ -10,22 +10,23 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { addNewCategory } from "@/services/category/category.service";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 interface INewCategoryModalProps {
   open: boolean;
   onClose: (value: boolean) => void;
+  categoryName: string;
+  setCategoryName: (val: string) => void;
+  onSubmit: (e: React.FormEvent) => Promise<void>;
 }
 export default function AddNewCategoryModal({
   open,
   onClose,
+  onSubmit,
+  categoryName,
+  setCategoryName,
 }: INewCategoryModalProps) {
-  const [name, setName] = useState("");
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    onClose(false);
-    setName("");
-  };
-
   return (
     <Dialog open={open} onOpenChange={onClose}>
       <DialogTrigger asChild></DialogTrigger>
@@ -37,15 +38,15 @@ export default function AddNewCategoryModal({
           </DialogTitle>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={onSubmit} className="space-y-6">
           <div className="space-y-2">
             <Label htmlFor="name" className="text-sm font-medium text-gray-700">
               Name
             </Label>
             <Input
               id="name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              value={categoryName}
+              onChange={(e) => setCategoryName(e.target.value)}
               className="bg-white border-gray-200 focus-visible:ring-[#13322B] rounded-md h-10"
             />
           </div>

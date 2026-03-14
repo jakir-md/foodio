@@ -1,7 +1,12 @@
 "use client";
-
-import { useState } from "react";
 import { Upload, X } from "lucide-react";
+import { useActionState, useRef, useState } from "react";
+const DUMMY_CATEGORIES = [
+  { id: "cat_1", name: "Beverages" },
+  { id: "cat_2", name: "Desserts" },
+  { id: "cat_3", name: "Main Course" },
+];
+
 import {
   Dialog,
   DialogContent,
@@ -10,7 +15,6 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
@@ -21,13 +25,9 @@ import {
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
-
-const DUMMY_CATEGORIES = [
-  { id: "1", name: "Starters" },
-  { id: "2", name: "Main Courses" },
-  { id: "3", name: "Desserts" },
-  { id: "4", name: "Beverages" },
-];
+import { Field, FieldLabel } from "@/components/ui/field";
+import InputFieldError from "@/components/shared/InputFieldError";
+import { addNewMenu } from "@/services/menu/menu.service";
 
 interface INewItemModalProps {
   open: boolean;
@@ -37,7 +37,35 @@ export default function AddNewItemModal({ open, onClose }: INewItemModalProps) {
   const [selectedFile, setSelectedFile] = useState<string | null>(
     "Dish_image.png",
   );
+  const [state, formAction, isPending] = useActionState(addNewMenu, {
+    message: null,
+    inputs: {},
+    errors: [],
+    success: false,
+  });
+
+  const [selectedFileName, setSelectedFileName] = useState<string | null>(null);
   const [isAvailable, setIsAvailable] = useState(true);
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const triggerFileInput = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setSelectedFileName(file.name);
+    }
+  };
+
+  const removeFile = () => {
+    setSelectedFileName(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  };
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
@@ -50,42 +78,54 @@ export default function AddNewItemModal({ open, onClose }: INewItemModalProps) {
           </DialogTitle>
         </DialogHeader>
 
-        <form className="space-y-5">
+        <form action={formAction} className="space-y-5">
           <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-1.5">
-              <Label
+            <Field className="space-y-1.5">
+              <FieldLabel
                 htmlFor="name"
                 className="text-sm font-medium text-gray-700"
               >
                 Name
-              </Label>
+              </FieldLabel>
               <Input
                 id="name"
+                name="name"
+                defaultValue={state?.inputs?.name}
                 className="bg-white border-gray-200 focus-visible:ring-[#13322B]"
               />
-            </div>
-            <div className="space-y-1.5">
-              <Label
+              <InputFieldError field="name" state={state} />
+            </Field>
+
+            <Field className="space-y-1.5">
+              <FieldLabel
                 htmlFor="price"
                 className="text-sm font-medium text-gray-700"
               >
                 Price
-              </Label>
+              </FieldLabel>
               <Input
                 id="price"
+                name="price"
+                type="number"
+                step="0.01"
+                defaultValue={state?.inputs?.price}
                 className="bg-white border-gray-200 focus-visible:ring-[#13322B]"
               />
-            </div>
+              <InputFieldError field="price" state={state} />
+            </Field>
           </div>
 
-          <div className="space-y-1.5">
-            <Label
+          <Field className="space-y-1.5">
+            <FieldLabel
               htmlFor="category"
               className="text-sm font-medium text-gray-700"
             >
               Category
-            </Label>
-            <Select defaultValue={DUMMY_CATEGORIES[0].id}>
+            </FieldLabel>
+            <Select
+              name="category"
+              defaultValue={state?.inputs?.category || DUMMY_CATEGORIES[0].id}
+            >
               <SelectTrigger className="w-full bg-white border-gray-200 focus:ring-[#13322B]">
                 <SelectValue placeholder="Select category" />
               </SelectTrigger>
@@ -97,72 +137,104 @@ export default function AddNewItemModal({ open, onClose }: INewItemModalProps) {
                 ))}
               </SelectContent>
             </Select>
-          </div>
+            <InputFieldError field="category" state={state} />
+          </Field>
 
-          <div className="space-y-1.5">
-            <Label
+          <Field className="space-y-1.5">
+            <FieldLabel
               htmlFor="description"
               className="text-sm font-medium text-gray-700"
             >
               Description
-            </Label>
+            </FieldLabel>
             <Textarea
               id="description"
+              name="description"
+              defaultValue={state?.inputs?.description}
               className="min-h-25 bg-white border-gray-200 focus-visible:ring-[#13322B] resize-none"
             />
-          </div>
+            <InputFieldError field="description" state={state} />
+          </Field>
 
-          <div className="space-y-1.5">
-            <Label className="text-sm font-medium text-gray-700">Image</Label>
+          <Field className="space-y-1.5">
+            <FieldLabel className="text-sm font-medium text-gray-700">
+              Image
+            </FieldLabel>
 
-            <div className="border border-gray-200 rounded-xl bg-white p-6 flex flex-col items-center justify-center cursor-pointer hover:bg-gray-50 transition-colors">
+            <input
+              type="file"
+              name="image"
+              accept="image/png, image/jpeg"
+              className="hidden"
+              ref={fileInputRef}
+              onChange={handleFileChange}
+            />
+
+            <div
+              onClick={triggerFileInput}
+              className="border border-gray-200 rounded-xl bg-white p-6 flex flex-col items-center justify-center cursor-pointer hover:bg-gray-50 transition-colors"
+            >
               <Upload className="w-6 h-6 text-gray-500 mb-3" />
               <p className="text-sm text-gray-700 mb-1">
                 Drag or click <span className="font-semibold">here</span> to
                 upload
               </p>
               <p className="text-[11px] text-gray-400">
-                Size must be maximum 2mb. Supported formats : PNG & JPEG
+                Size must be maximum 2mb. Supported formats: PNG & JPEG
               </p>
             </div>
 
-            {selectedFile && (
+            {selectedFileName && (
               <div className="flex items-center justify-between p-3 mt-3 bg-white border border-gray-200 rounded-lg">
-                <span className="text-sm text-gray-700">1. {selectedFile}</span>
+                <span className="text-sm text-gray-700 line-clamp-1 truncate mr-4">
+                  1. {selectedFileName}
+                </span>
                 <button
                   type="button"
-                  onClick={() => setSelectedFile(null)}
-                  className="text-gray-400 hover:text-gray-600"
+                  onClick={removeFile}
+                  className="text-gray-400 hover:text-red-500 transition-colors flex-shrink-0"
                 >
                   <X className="w-4 h-4" />
                 </button>
               </div>
             )}
-          </div>
+            <InputFieldError field="image" state={state} />
+          </Field>
 
           <div className="flex items-center justify-between pt-2">
-            <div className="flex items-center gap-3">
+            <Field className="flex items-center gap-3">
               <Switch
                 id="available"
                 checked={isAvailable}
                 onCheckedChange={setIsAvailable}
                 className="data-[state=checked]:bg-[#13322B]"
               />
-              <Label
+              <input
+                type="hidden"
+                name="isAvailable"
+                value={isAvailable.toString()}
+              />
+              <FieldLabel
                 htmlFor="available"
                 className="text-sm text-gray-700 cursor-pointer"
               >
                 Available for Order
-              </Label>
-            </div>
+              </FieldLabel>
+            </Field>
 
             <Button
               type="submit"
-              className="bg-[#13322B] text-white hover:bg-[#1a453b] px-6 rounded-lg"
+              disabled={isPending}
+              className="bg-[#13322B] text-white hover:bg-[#1a453b] px-6 rounded-lg disabled:opacity-70 disabled:cursor-not-allowed"
             >
-              Save Changes
+              {isPending ? "Saving..." : "Save Changes"}
             </Button>
           </div>
+
+          {/* General Form Error Message */}
+          {state?.message && !state?.success && (
+            <p className="text-red-500 text-sm mt-2">{state.message}</p>
+          )}
         </form>
       </DialogContent>
     </Dialog>
