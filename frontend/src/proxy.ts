@@ -23,7 +23,6 @@ export async function proxy(request: NextRequest) {
 
     if (typeof verifiedToken === "string") {
       await deleteCookie("accessToken");
-      await deleteCookie("refreshToken");
       return NextResponse.redirect(new URL("/login", request.url));
     }
 

@@ -2,7 +2,7 @@
 import { getCookie } from "@/services/auth/tokenHandlers";
 
 const BACKEND_API_URL =
-  process.env.NEXT_PUBLIC_BASE_API_URL || "http://localhost:5000/api/v1";
+  process.env.BACKEND_URL || "http://localhost:5000/api/v1";
 
 // /auth/login
 const serverFetchHelper = async (
@@ -11,6 +11,7 @@ const serverFetchHelper = async (
 ): Promise<Response> => {
   const { headers, ...restOptions } = options;
   const accessToken = await getCookie("accessToken");
+  console.log("accessToken", { accessToken });
   // console.log(accessToken,'accessToken in server-fetch');
 
   //   //to stop recursion loop

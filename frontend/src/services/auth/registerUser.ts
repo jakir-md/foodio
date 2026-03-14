@@ -19,7 +19,7 @@ export const registerUser = async (
     };
 
     if (zodValidator(payload, registerSchema).success === false) {
-      return zodValidator(payload, registerSchema);
+      return { ...zodValidator(payload, registerSchema), inputs: payload };
     }
 
     const validatedPayload: any = zodValidator(payload, registerSchema).data;
@@ -30,7 +30,7 @@ export const registerUser = async (
       email: validatedPayload.email,
     };
 
-    const res = await serverFetch.post("/user/create-patient", {
+    const res = await serverFetch.post("/auth/register", {
       body: JSON.stringify(registerData),
       headers: {
         "Content-Type": "application/json",

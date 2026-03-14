@@ -1,9 +1,36 @@
 "use client";
+import { getUserInfo, UserInfo } from "@/services/auth/getUserInfo";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
+import { User, Check, LogOut } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { logoutUser } from "@/services/auth/logoutUser";
 
 export default function Navbar() {
   const pathname = usePathname();
+  const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
+  useEffect(() => {
+    async function fetchInfo() {
+      const info = await getUserInfo();
+      setUserInfo(info);
+    }
+    fetchInfo();
+  }, []);
+
+  const handleLogout = async () => {
+    console.log("logged out clicked");
+    setUserInfo(null);
+    await logoutUser();
+  };
+
   const navLinks = [
     { name: "Home", href: "/" },
     { name: "Food Menu", href: "/food-menu" },
@@ -58,27 +85,68 @@ export default function Navbar() {
           </svg>
           <span className="font-semibold">2</span>
         </button>
+        {userInfo && userInfo.email ? (
+          <div className="flex items-center gap-3">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button className="flex items-center justify-center w-10 h-10 bg-[#13322B] text-white rounded-full hover:bg-[#1a453b] transition-colors focus:outline-none focus:ring-2 focus:ring-[#13322B] focus:ring-offset-2">
+                  <User className="w-4.5 h-4.5" />
+                </button>
+              </DropdownMenuTrigger>
 
-        <Link
-          href="/login"
-          className="flex items-center gap-2 px-6 py-2.5 bg-[#13322B] text-white rounded-full hover:bg-[#1a453b] transition-colors shadow-lg shadow-[#13322B]/20"
-        >
-          Sign in
-          <svg
-            className="w-4 h-4"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
+              <DropdownMenuContent
+                align="end"
+                className="w-48 p-2 rounded-xl border-gray-100 shadow-lg"
+              >
+                <DropdownMenuLabel className="font-normal text-gray-500 text-sm py-2 px-3">
+                  My Account
+                </DropdownMenuLabel>
+
+                <div className="px-1">
+                  <DropdownMenuItem className="flex items-center justify-between cursor-pointer py-2 px-2 rounded-md bg-gray-50 focus:bg-gray-100">
+                    <span className="text-sm text-gray-800">Orders</span>
+                    <Check className="w-4 h-4 text-gray-800" />
+                  </DropdownMenuItem>
+                </div>
+
+                <DropdownMenuSeparator className="my-2 bg-gray-100" />
+
+                <div className="px-1">
+                  <DropdownMenuItem
+                    onClick={handleLogout}
+                    className="text-red-500 focus:text-red-600 focus:bg-red-50 cursor-pointer py-2 px-2 flex items-center gap-2 rounded-md transition-colors"
+                  >
+                    <span className="text-sm font-medium flex gap-1">
+                      <LogOut className="w-4 h-4" />
+                      Sign out
+                    </span>
+                  </DropdownMenuItem>
+                </div>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        ) : (
+          <Link
+            href="/login"
+            className="flex items-center gap-2 px-6 py-2.5 bg-[#13322B] text-white rounded-full hover:bg-[#1a453b] transition-colors shadow-lg shadow-[#13322B]/20"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M14 5l7 7m0 0l-7 7m7-7H3"
-            />
-          </svg>
-        </Link>
+            Sign in
+            <svg
+              className="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M14 5l7 7m0 0l-7 7m7-7H3"
+              />
+            </svg>
+          </Link>
+        )}
       </div>
     </header>
   );

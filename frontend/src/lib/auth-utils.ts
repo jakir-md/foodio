@@ -8,7 +8,7 @@ export type RouteConfig = {
 export const authRoutes = ["/login", "/register", "/forgot-password"];
 
 export const commonProtectedRoutes: RouteConfig = {
-  exact: [ "/change-password", "/reset-password"],
+  exact: ["/change-password", "/reset-password"],
   patterns: [],
 };
 
@@ -53,10 +53,10 @@ export const getRouteOwner = (
 
 export const getDefaultDashboardRoute = (role: UserRole): string => {
   if (role === "ADMIN") {
-    return "/admin/dashboard";
+    return "/admin/dashboard/menu-items";
   }
   if (role === "USER") {
-    return "/dashboard";
+    return "/";
   }
   return "/";
 };

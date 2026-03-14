@@ -1,5 +1,4 @@
 import MenuItemPage from "@/components/modules/menuItem/MenuItemPage";
-import MenuItemsTable from "@/components/modules/menuItem/MenuItemsTable";
 
 export default function MenuItems() {
   const DUMMY_MENU_ITEMS = [
