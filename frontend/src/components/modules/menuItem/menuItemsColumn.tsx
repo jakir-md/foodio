@@ -6,7 +6,9 @@ export interface IMenuItem {
   name: string;
   category: { name: string };
   price: number;
+  image: string;
   isAvailable: boolean;
+  description: string;
 }
 
 export const menuItemsColumns: Column<IMenuItem>[] = [

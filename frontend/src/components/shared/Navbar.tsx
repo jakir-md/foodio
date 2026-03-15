@@ -13,6 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { logoutUser } from "@/services/auth/logoutUser";
+import CartModal from "../modules/cart/CartModal";
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -30,6 +31,8 @@ export default function Navbar() {
     setUserInfo(null);
     await logoutUser();
   };
+
+  const [cartOpen, setCartOpen] = useState(false);
 
   const navLinks = [
     { name: "Home", href: "/" },
@@ -68,7 +71,10 @@ export default function Navbar() {
       </nav>
 
       <div className="flex items-center gap-4">
-        <button className="flex items-center gap-2 px-4 py-2.5 border border-[#13322B] text-[#13322B] rounded-full hover:bg-gray-50 transition-colors">
+        <button
+          onClick={() => setCartOpen(true)}
+          className="flex items-center gap-2 px-4 py-2.5 border border-[#13322B] text-[#13322B] rounded-full hover:bg-gray-50 transition-colors"
+        >
           <svg
             className="w-5 h-5"
             fill="none"
@@ -85,6 +91,7 @@ export default function Navbar() {
           </svg>
           <span className="font-semibold">2</span>
         </button>
+        <CartModal isOpen={cartOpen} onClose={() => setCartOpen(false)} />
         {userInfo && userInfo.email ? (
           <div className="flex items-center gap-3">
             <DropdownMenu>

@@ -8,7 +8,7 @@ const DUMMY_DATA = [
     description: "Jumbo scallops with cauliflower purée and truffle oil.",
     price: 15.0,
     category: "starters",
-    imageUrl: "https://i.ibb.co/SwLSq3rg/red.png",
+    image: "https://i.ibb.co/SwLSq3rg/red.png",
   },
   {
     id: "2",
@@ -16,9 +16,10 @@ const DUMMY_DATA = [
     description: "Jumbo scallops with cauliflower purée and truffle oil.",
     price: 25.0,
     category: "starters",
-    imageUrl: "https://i.ibb.co/SwLSq3rg/red.png",
+    image: "https://i.ibb.co/SwLSq3rg/red.png",
   },
 ];
+
 export default function HomePage() {
   return (
     <div>

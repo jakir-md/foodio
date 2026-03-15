@@ -3,8 +3,10 @@
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
+import { logoutUser } from "@/services/auth/logoutUser";
 import { NavSection } from "@/types/dashboard.interface";
 import { ScrollArea } from "@radix-ui/react-scroll-area";
+import { LogOut } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -18,6 +20,11 @@ const DashboardSidebarContent = ({
   dashboardHome,
 }: DashboardSidebarContentProps) => {
   const pathname = usePathname();
+  const handleLogout = async () => {
+    console.log("logged out clicked");
+    // setUserInfo(null);
+    await logoutUser();
+  };
   return (
     <div className="hidden md:flex h-full w-64 flex-col border-r bg-card">
       {/* Logo/Brand */}
@@ -75,22 +82,15 @@ const DashboardSidebarContent = ({
         </nav>
       </ScrollArea>
 
-      {/* User Info at Bottom */}
-      {/* <div className="border-t p-4">
-        <div className="flex items-center gap-3">
-          <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center">
-            <span className="text-sm font-semibold text-primary">
-              {userInfo.name.charAt(0).toUpperCase()}
-            </span>
-          </div>
-          <div className="flex-1 overflow-hidden">
-            <p className="text-sm font-medium truncate">{userInfo.name}</p>
-            <p className="text-xs text-muted-foreground capitalize">
-              {userInfo.role.toLowerCase()}
-            </p>
-          </div>
-        </div>
-      </div> */}
+      <div className="border-t border-gray-200 pt-3 mt-2">
+        <button
+          onClick={handleLogout}
+          className="flex items-center gap-3 w-full px-4 py-2 text-[#D34545] font-medium hover:bg-red-50 hover:cursor-pointer rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-red-100"
+        >
+          <LogOut className="w-5 h-5" />
+          <span>Sign Out</span>
+        </button>
+      </div>
     </div>
   );
 };
