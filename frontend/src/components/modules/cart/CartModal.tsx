@@ -9,6 +9,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { placeOrder } from "@/services/order/order.service";
 
 interface CartModalProps {
   isOpen: boolean;
@@ -16,46 +17,36 @@ interface CartModalProps {
 }
 
 export default function CartModal({ isOpen, onClose }: CartModalProps) {
-  // 1. Next.js Hydration Fix
   const [isMounted, setIsMounted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // 2. Zustand Global Store
   const { items, updateQuantity, removeItem, clearCart } = useCartStore();
 
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
-  // 3. Derived State (Totals)
   const totalAmount = items.reduce(
     (total, item) => total + item.price * item.quantity,
     0,
   );
   const totalItems = items.reduce((total, item) => total + item.quantity, 0);
 
-  // 4. Handlers
   const handleConfirmOrder = async () => {
     setIsSubmitting(true);
     try {
-      // Create the payload for your backend
       const orderPayload = items.map((item) => ({
         menuItemId: item.id,
         quantity: item.quantity,
       }));
 
-      console.log("Sending to backend:", orderPayload);
+      console.log({ orderPayload });
 
-      // TODO: Call your Next.js Server Action here
-      // const result = await submitOrderAction(orderPayload);
-
-      // Simulating a backend delay
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      // On Success:
-      clearCart(); // Wipe localStorage
-      onClose(); // Close modal
-      // Optional: router.push("/my-orders") or show a success toast!
+      const result = await placeOrder(orderPayload);
+      if (result.success) {
+        clearCart();
+        onClose();
+      }
     } catch (error) {
       console.error("Order failed", error);
     } finally {
@@ -63,12 +54,11 @@ export default function CartModal({ isOpen, onClose }: CartModalProps) {
     }
   };
 
-  // Prevent rendering until hydration is complete to avoid Next.js errors
   if (!isMounted) return null;
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="bg-[#FDFDFC] !rounded-2xl p-6 w-[95%] max-w-md shadow-xl gap-0 border-none">
+      <DialogContent className="bg-[#FDFDFC] rounded-2xl! p-6 w-[95%] max-w-md shadow-xl gap-0 border-none">
         <DialogHeader className="mb-2">
           <div className="flex items-center justify-between">
             <DialogTitle className="text-xl font-semibold text-[#13322B] flex items-center gap-2">

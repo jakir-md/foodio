@@ -1,5 +1,8 @@
 import MyOrdersPage from "@/components/modules/Home/Orders";
+import { getMyOrders } from "@/services/order/order.service";
 
-export default function MyOrders() {
-  return <MyOrdersPage />;
+export default async function MyOrders() {
+  const orders = await getMyOrders();
+  console.log({ orders });
+  return <MyOrdersPage orders={orders.data} />;
 }

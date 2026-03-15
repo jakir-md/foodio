@@ -2,46 +2,21 @@ import React from "react";
 
 type OrderStatus = "PENDING" | "PREPARING" | "READY" | "COMPLETED";
 
-type OrderItem = {
+interface OrderItem {
   id: string;
   name: string;
   quantity: number;
   price: number;
-};
+}
 
-type Order = {
+export interface Order {
   id: string;
   createdAt: string;
   totalAmount: number;
   status: OrderStatus;
   address: string;
   items: OrderItem[];
-};
-
-const DUMMY_ORDERS: Order[] = [
-  {
-    id: "5b331ea1",
-    createdAt: "December 12th, 2025 at 4:33 PM",
-    totalAmount: 20.0,
-    status: "PENDING",
-    address: "House 23, Road 23, Jamaica, USA",
-    items: [
-      { id: "1", name: "Golden Crunch Bites", quantity: 1, price: 10.0 },
-      { id: "2", name: "Citrus Swirl Delights", quantity: 1, price: 10.0 },
-    ],
-  },
-  {
-    id: "5b331ea2",
-    createdAt: "December 12th, 2025 at 4:33 PM",
-    totalAmount: 24.0,
-    status: "COMPLETED",
-    address: "House 23, Road 23, Jamaica, USA",
-    items: [
-      { id: "1", name: "Golden Crunch Bites", quantity: 1, price: 14.0 },
-      { id: "2", name: "Citrus Swirl Delights", quantity: 1, price: 10.0 },
-    ],
-  },
-];
+}
 
 const STEPS: OrderStatus[] = ["PENDING", "PREPARING", "READY", "COMPLETED"];
 
@@ -157,7 +132,10 @@ const OrderCard = ({ order }: { order: Order }) => {
   );
 };
 
-export default function MyOrdersPage() {
+interface MyOrderProps {
+  orders: Order[];
+}
+export default function MyOrdersPage({ orders }: MyOrderProps) {
   return (
     <main className="max-w-360 mx-auto px-6 md:px-12 pt-32 pb-24 min-h-screen">
       <h1 className="text-3xl font-serif font-bold text-[#13322B] mb-10">
@@ -165,7 +143,7 @@ export default function MyOrdersPage() {
       </h1>
 
       <div className="flex flex-col gap-2">
-        {DUMMY_ORDERS.map((order) => (
+        {orders.map((order) => (
           <OrderCard key={order.id} order={order} />
         ))}
       </div>
