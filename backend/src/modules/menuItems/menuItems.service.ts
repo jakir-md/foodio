@@ -20,6 +20,22 @@ export class MenuItemsService {
     });
   }
 
+  async updateItem(data: any) {
+    const { menuId, categoryId, ...restOfData } = data;
+    console.log("categoryId from services", categoryId);
+    return this.prisma.menuItem.update({
+      where: {
+        id: menuId,
+      },
+      data: {
+        ...restOfData,
+        category: {
+          connect: { id: categoryId },
+        },
+      },
+    });
+  }
+
   async findAll(query?: {
     search?: string;
     categoryId?: string;
@@ -41,7 +57,20 @@ export class MenuItemsService {
 
     return this.prisma.menuItem.findMany({
       where: whereClause,
-      include: { category: true },
+      select: {
+        category: {
+          select: {
+            name: true,
+            id: true,
+          },
+        },
+        id: true,
+        isAvailable: true,
+        name: true,
+        description: true,
+        image: true,
+        price: true,
+      },
     });
   }
 

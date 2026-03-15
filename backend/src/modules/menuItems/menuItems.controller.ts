@@ -11,6 +11,7 @@ import {
   UseInterceptors,
   UploadedFile,
   BadRequestException,
+  Patch,
 } from "@nestjs/common";
 import { MenuItemsService } from "./menuItems.service";
 import { Prisma, Role } from "@prisma/client";
@@ -57,11 +58,7 @@ export class MenuItemsController {
       throw new BadRequestException("Image file is required.");
     }
     const imageUrl = file.path;
-    console.log({ imageUrl });
-
     const parsedData = JSON.parse(body.data);
-
-    // Now extract the fields from the parsed object!
     const productData = {
       name: parsedData.name,
       price: parseFloat(String(parsedData.price)),
@@ -80,12 +77,31 @@ export class MenuItemsController {
     };
   }
 
-  @Put(":id")
+  @Patch()
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
+  @UseInterceptors(FileInterceptor("file", { storage: storage }))
   async updateMenuItem(
-    @Param("id") id: string,
-    @Body() data: UpdateMenuItemDto,
+    @Body() body: any,
+    @UploadedFile() file: Express.Multer.File,
   ) {
-    return this.menuItemsService.update(id, data);
+    const parsedData = JSON.parse(body.data);
+    const imageUrl = file.path || parsedData.image;
+    const productData = {
+      name: parsedData.name,
+      menuId: parsedData.menuId,
+      price: parseFloat(String(parsedData.price)),
+      description: parsedData.description,
+      categoryId: parsedData.categoryId,
+      isAvailable: String(parsedData.isAvailable) === "true",
+      image: imageUrl,
+    };
+    const result = await this.menuItemsService.updateItem(productData);
+    return {
+      success: true,
+      message: "Product created successfully",
+      data: result,
+    };
   }
 
   @Delete(":id")

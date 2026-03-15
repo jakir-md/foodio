@@ -4,7 +4,7 @@ import { Pencil, Trash2 } from "lucide-react";
 export interface IMenuItem {
   id: string;
   name: string;
-  category: { name: string };
+  category: { name: string; id: string };
   price: number;
   image: string;
   isAvailable: boolean;
@@ -44,5 +44,4 @@ export const menuItemsColumns: Column<IMenuItem>[] = [
       </span>
     ),
   },
-
 ];

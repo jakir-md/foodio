@@ -90,12 +90,20 @@ export const deleteMenu = async (): Promise<any> => {
   }
 };
 
-export const editMenu = async (): Promise<any> => {
+export const editMenu = async (
+  payload: any,
+  file?: File | null,
+): Promise<any> => {
+  const newFormData = new FormData();
+  newFormData.append("data", JSON.stringify(payload));
+  if (file) {
+    newFormData.append("file", file);
+  }
+
+  console.log({file, payload})
   try {
-    const res = await serverFetch.patch("/menu", {
-      headers: {
-        "Content-Type": "application/json",
-      },
+    const res = await serverFetch.patch("/menu-items", {
+      body: newFormData,
     });
 
     const result = await res.json();

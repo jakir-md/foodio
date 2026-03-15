@@ -107,7 +107,7 @@ function ManagementTable<T>({
                       {onView && (
                         <Button
                           onClick={() => onView(item)}
-                          className="bg-gray-100 hover:bg-gray-200 text-gray-800 text-xs font-medium px-4 py-1.5 rounded-md transition-colors"
+                          className="bg-gray-100 hover:cursor-pointer hover:bg-gray-200 text-gray-800 text-xs font-medium px-4 py-1.5 rounded-md transition-colors"
                         >
                           Details
                         </Button>
@@ -115,7 +115,7 @@ function ManagementTable<T>({
                       <div>
                         {onEdit && (
                           <button onClick={() => onEdit(item)}>
-                            <Edit className="mr-2 h-4 w-4" />
+                            <Edit className="mr-2 hover:cursor-pointer h-4 w-4" />
                           </button>
                         )}
                         {onDelete && (
@@ -123,7 +123,7 @@ function ManagementTable<T>({
                             onClick={() => onDelete(item)}
                             className="text-destructive"
                           >
-                            <Trash className="mr-2 h-4 w-4" />
+                            <Trash className="mr-2 hover:cursor-pointer h-4 w-4" />
                           </button>
                         )}
                       </div>

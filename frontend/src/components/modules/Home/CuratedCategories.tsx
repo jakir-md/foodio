@@ -13,8 +13,9 @@ const CATEGORIES = [
 ];
 
 export default function CuratedCategories({ items }: { items: IMenuItem[] }) {
+  if (!items) return null;
   console.log({ items });
-  const [activeCategory, setActiveCategory] = useState(CATEGORIES[0].id);
+  const [activeCategory, setActiveCategory] = useState(CATEGORIES[0].label);
   const [quantity, setQuantity] = useState(1);
   const [currentItem, setCurrentItem] = useState<IMenuItem | null>(null);
   const filteredItems = items.filter(

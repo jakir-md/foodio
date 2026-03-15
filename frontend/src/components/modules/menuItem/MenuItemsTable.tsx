@@ -8,6 +8,7 @@ import ManagementTable from "@/components/shared/MangementTable";
 import { IMenuItem, menuItemsColumns } from "./menuItemsColumn";
 import AddNewItemModal from "./AddNewItemModal";
 import { ICategory } from "./categoryColumn";
+import EditMenuItemModal from "./EditMenuItemModal";
 
 interface MenuItemsTableProps {
   menus: IMenuItem[];
@@ -27,7 +28,8 @@ const MenuItemsTable = ({
   const [deletingMenu, setDeletingMenu] = useState<IMenuItem | null>(null);
   const [editingMenu, setEditingMenu] = useState<IMenuItem | null>(null);
   const [addMenu, setAddMenu] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(true);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
 
   const handleRefresh = () => {
     startTransition(() => {
@@ -37,6 +39,7 @@ const MenuItemsTable = ({
 
   const handleEdit = (item: IMenuItem) => {
     setEditingMenu(item);
+    setIsEditing(true);
   };
 
   const handleDelete = (item: IMenuItem) => {
@@ -90,6 +93,12 @@ const MenuItemsTable = ({
         title="Delete Menu"
         description={`Are you sure you want to delete ${deletingMenu?.name}? This action cannot be undone.`}
         isDeleting={isDeleting}
+      />
+      <EditMenuItemModal
+        initialData={editingMenu}
+        isOpen={isEditing}
+        onClose={() => setIsEditing(false)}
+        categories={categories}
       />
     </>
   );
