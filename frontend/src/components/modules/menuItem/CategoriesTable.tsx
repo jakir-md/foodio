@@ -8,7 +8,10 @@ import ManagementTable from "@/components/shared/MangementTable";
 import { IMenuItem } from "./menuItemsColumn";
 import { categoryColumns, ICategory } from "./categoryColumn";
 import AddNewCategoryModal from "./AddNewCategoryModal";
-import { addNewCategory } from "@/services/category/category.service";
+import {
+  addNewCategory,
+  deleteCategory,
+} from "@/services/category/category.service";
 import { toast } from "sonner";
 
 interface CategoryTableProps {
@@ -33,7 +36,7 @@ const CategoryTable = ({
     null,
   );
   const [addCategory, setAddCategory] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(true);
+  const [deleteCat, setDeleteCategory] = useState(false);
 
   const handleRefresh = () => {
     startTransition(() => {
@@ -59,28 +62,26 @@ const CategoryTable = ({
       console.log("Category addition errror", error);
     }
   };
-  const handleEdit = (admin: IMenuItem) => {
-    setEditingCategory(admin);
+  const handleEdit = (category: ICategory) => {
+    setEditingCategory(category);
   };
 
-  const handleDelete = (admin: IMenuItem) => {
-    setDeletingCategory(admin);
+  const handleDelete = (category: ICategory) => {
+    setDeleteCategory(true);
+    setDeletingCategory(category);
   };
 
   const confirmDelete = async () => {
     if (!deletingCateogry) return;
+    const result = await deleteCategory(deletingCateogry.id!);
 
-    // setIsDeleting(true);
-    // const result = await softDeleteAdmin(deletingAdmin.id!);
-    // setIsDeleting(false);
-
-    // if (result.success) {
-    //   toast.success(result.message || "Menu deleted successfully");
-    //   setDeletingMenu(null);
-    //   handleRefresh();
-    // } else {
-    //   toast.error(result.message || "Failed to delete Menu");
-    // }
+    if (result.success) {
+      toast.success(result.message || "Category deleted successfully");
+      setDeletingCategory(null);
+      handleRefresh();
+    } else {
+      toast.error(result.message || "Category to delete Menu");
+    }
   };
 
   return (
@@ -91,37 +92,30 @@ const CategoryTable = ({
         handleToggle={handleToggle}
         title="Category"
       />
+
       <ManagementTable
         data={menus}
         columns={categoryColumns}
-        // onEdit={handleEdit}
-        // onDelete={handleDelete}
+        onEdit={handleEdit}
+        onDelete={handleDelete}
         getRowKey={(admin) => admin.id!}
         emptyMessage="No Category Found"
       />
 
-      {/* Edit Admin Form Dialog */}
       <AddNewCategoryModal
         open={addCategory}
         onClose={() => setAddCategory(false)}
         onSubmit={handleSubmit}
         setCategoryName={setCategoryName}
         categoryName={categoryName}
-        // admin={editingAdmin!}
-        // onSuccess={() => {
-        //   setEditingAdmin(null);
-        //   handleRefresh();
-        // }}
       />
 
-      {/* Delete Confirmation Dialog */}
       <DeleteConfirmationDialog
-        open={!!deletingCateogry}
-        onOpenChange={(open) => !open && setDeletingCategory(null)}
+        open={deleteCat}
+        onOpenChange={() => setDeleteCategory(false)}
         onConfirm={confirmDelete}
         title="Delete Category"
         description={`Are you sure you want to delete ${deletingCateogry?.name}? This action cannot be undone.`}
-        isDeleting={isDeleting}
       />
     </>
   );

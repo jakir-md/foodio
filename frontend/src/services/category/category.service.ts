@@ -34,23 +34,12 @@ export const addNewCategory = async (name: string): Promise<any> => {
       data: [],
       message: errorMessage,
     };
-
-    return {
-      data: [],
-      success: false,
-      message: `${process.env.NODE_ENV === "development" ? error.message : "Menu addition failed. Please try again."}`,
-    };
   }
 };
 
-export const deleteCategory = async (): Promise<any> => {
+export const deleteCategory = async (categoryId: string): Promise<any> => {
   try {
-    const res = await serverFetch.delete("/categories", {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
+    const res = await serverFetch.delete(`/categories/${categoryId}`);
     const result = await res.json();
     return result;
   } catch (error: any) {
@@ -66,6 +55,7 @@ export const deleteCategory = async (): Promise<any> => {
     };
   }
 };
+
 export const editCategory = async (): Promise<any> => {
   try {
     const res = await serverFetch.patch("/categories", {

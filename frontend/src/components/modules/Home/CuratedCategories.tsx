@@ -2,6 +2,9 @@
 
 import { useState } from "react";
 import FoodItem, { FoodItemProps } from "./FoodItem";
+import AddToCartDialog from "../cart/AddToCartDialog";
+import { useCartStore } from "@/store/useCartStore";
+import { IMenuItem } from "../menuItem/menuItemsColumn";
 
 const CATEGORIES = [
   { id: "starters", label: "Starters", icon: "🍽️" },
@@ -9,16 +12,29 @@ const CATEGORIES = [
   { id: "desserts", label: "Desserts", icon: "🍰" },
 ];
 
-export default function CuratedCategories({
-  items,
-}: {
-  items: FoodItemProps[];
-}) {
+export default function CuratedCategories({ items }: { items: IMenuItem[] }) {
+  console.log({ items });
   const [activeCategory, setActiveCategory] = useState(CATEGORIES[0].id);
-
+  const [quantity, setQuantity] = useState(1);
+  const [currentItem, setCurrentItem] = useState<IMenuItem | null>(null);
   const filteredItems = items.filter(
-    (item) => item.category === activeCategory,
+    (item) => item.category.name === activeCategory,
   );
+
+  const addItem = useCartStore((state) => state.addItem);
+
+  const handleModalAddToCart = () => {
+    if (!currentItem) return null;
+    addItem({
+      id: currentItem!.id,
+      name: currentItem!.name,
+      price: currentItem!.price,
+      image: currentItem!.image,
+      quantity: quantity,
+    });
+    setCurrentItem(null);
+    setQuantity(1);
+  };
 
   return (
     <section className="max-w-360 mx-auto px-6 md:px-12 py-20">
@@ -33,11 +49,11 @@ export default function CuratedCategories({
 
       <div className="flex justify-center gap-4 mb-16 flex-wrap">
         {CATEGORIES.map((cat) => {
-          const isActive = activeCategory === cat.id;
+          const isActive = activeCategory === cat.label;
           return (
             <button
               key={cat.id}
-              onClick={() => setActiveCategory(cat.id)}
+              onClick={() => setActiveCategory(cat.label)}
               className={`flex flex-col items-center justify-center w-32 h-32 rounded-3xl transition-all ${
                 isActive
                   ? "bg-[#FFF9F0] shadow-md scale-105"
@@ -59,7 +75,7 @@ export default function CuratedCategories({
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 gap-y-16">
         {filteredItems.map((item) => (
-          <FoodItem key={item.id} item={item} />
+          <FoodItem key={item.id} item={item} setCurrentItem={setCurrentItem} />
         ))}
       </div>
 
@@ -68,6 +84,18 @@ export default function CuratedCategories({
           No items found in this category right now. Check back later!
         </div>
       )}
+
+      <AddToCartDialog
+        isOpen={!!currentItem}
+        onOpenChange={() => {
+          setCurrentItem(null);
+          setQuantity(1);
+        }}
+        quantity={quantity}
+        productName={currentItem?.name}
+        setQuantity={setQuantity}
+        onAddToCart={handleModalAddToCart}
+      />
     </section>
   );
 }

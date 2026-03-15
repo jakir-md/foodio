@@ -45,6 +45,8 @@ export class CategoriesController {
   }
 
   @Delete(":id")
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
   async deleteCategory(@Param("id") id: string) {
     return this.categoriesService.remove(id);
   }

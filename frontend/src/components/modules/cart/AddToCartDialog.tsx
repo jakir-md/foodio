@@ -8,6 +8,7 @@ import {
   DialogFooter,
   DialogClose,
 } from "@/components/ui/dialog";
+import { toast } from "sonner";
 
 interface QuantityDialogProps {
   isOpen: boolean;
@@ -40,6 +41,7 @@ export default function AddToCartDialog({
 
   const handleAdd = () => {
     onAddToCart();
+    toast.success("Item Added to Cart.")
     onOpenChange(false);
   };
 

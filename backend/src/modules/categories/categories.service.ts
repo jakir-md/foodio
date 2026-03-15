@@ -1,4 +1,9 @@
-import { ConflictException, Injectable } from "@nestjs/common";
+import {
+  BadRequestException,
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from "@nestjs/common";
 import { PrismaService } from "../../prisma/prisma.service";
 import { Prisma } from "@prisma/client";
 
@@ -30,7 +35,31 @@ export class CategoriesService {
     return this.prisma.category.update({ where: { id }, data });
   }
 
-  async remove(id: string) {
-    return this.prisma.category.delete({ where: { id } });
+  async remove(categoryId: string) {
+    const existingCategory = await this.prisma.category.findUnique({
+      where: { id: categoryId },
+    });
+
+    if (!existingCategory) {
+      throw new NotFoundException(`Category with ID ${categoryId} not found.`);
+    }
+
+    try {
+      await this.prisma.category.delete({
+        where: { id: categoryId },
+      });
+
+      return {
+        success: true,
+        message: "Category deleted successfully",
+      };
+    } catch (error: any) {
+      if (error.code === "P2003") {
+        throw new BadRequestException(
+          "Cannot delete this category because it still has menu items attached to it. Please reassign or delete those items first.",
+        );
+      }
+      throw error;
+    }
   }
 }

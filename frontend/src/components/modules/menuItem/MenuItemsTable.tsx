@@ -35,12 +35,12 @@ const MenuItemsTable = ({
     });
   };
 
-  const handleEdit = (admin: IMenuItem) => {
-    setEditingMenu(admin);
+  const handleEdit = (item: IMenuItem) => {
+    setEditingMenu(item);
   };
 
-  const handleDelete = (admin: IMenuItem) => {
-    setDeletingMenu(admin);
+  const handleDelete = (item: IMenuItem) => {
+    setDeletingMenu(item);
   };
 
   const confirmDelete = async () => {
@@ -75,8 +75,6 @@ const MenuItemsTable = ({
         getRowKey={(admin) => admin.id!}
         emptyMessage="No menu items found"
       />
-
-      {/* Edit Admin Form Dialog */}
       <AddNewItemModal
         open={addMenu}
         onClose={() => setAddMenu(false)}
@@ -85,8 +83,6 @@ const MenuItemsTable = ({
           handleRefresh();
         }}
       />
-
-      {/* Delete Confirmation Dialog */}
       <DeleteConfirmationDialog
         open={!!deletingMenu}
         onOpenChange={(open) => !open && setDeletingMenu(null)}

@@ -1,5 +1,6 @@
 import CuratedCategories from "@/components/modules/Home/CuratedCategories";
 import HeroSection from "@/components/shared/HeroSection";
+import { getAllMenu } from "@/services/menu/menu.service";
 
 const DUMMY_DATA = [
   {
@@ -20,11 +21,12 @@ const DUMMY_DATA = [
   },
 ];
 
-export default function HomePage() {
+export default async function HomePage() {
+  const foodItems = await getAllMenu();
   return (
     <div>
       <HeroSection />
-      <CuratedCategories items={DUMMY_DATA} />
+      <CuratedCategories items={foodItems.data} />
     </div>
   );
 }
