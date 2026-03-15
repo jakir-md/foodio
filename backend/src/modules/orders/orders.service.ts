@@ -1,5 +1,10 @@
-import { Injectable, BadRequestException } from "@nestjs/common";
+import {
+  Injectable,
+  BadRequestException,
+  NotFoundException,
+} from "@nestjs/common";
 import { PrismaService } from "../../prisma/prisma.service";
+import { OrderStatus } from "@prisma/client";
 
 function formatOrderDate(date: Date): string {
   const months = [
@@ -61,12 +66,13 @@ export class OrdersService {
           `${dbItem.name} is currently out of stock.`,
         );
 
-      totalAmount += dbItem.price * cartItem.quantity;
+      const subtotal = dbItem.price * cartItem.quantity;
+      totalAmount += subtotal;
 
       return {
         menuItemId: dbItem.id,
         quantity: cartItem.quantity,
-        price: dbItem.price,
+        price: subtotal,
       };
     });
 
@@ -161,5 +167,26 @@ export class OrdersService {
         price: Number(item.price || item.menuItem?.price || 0),
       })),
     }));
+  }
+
+  async updateStatus(orderId: string, newStatus: OrderStatus) {
+    console.log({ orderId, newStatus });
+    const existingOrder = await this.prisma.order.findUnique({
+      where: { id: orderId },
+    });
+
+    if (!existingOrder) {
+      throw new NotFoundException(`Order with ID ${orderId} not found.`);
+    }
+
+    const status = newStatus.toUpperCase();
+    const updatedOrder = await this.prisma.order.update({
+      where: { id: orderId },
+      data: {
+        status: status as OrderStatus,
+      },
+    });
+
+    return updatedOrder;
   }
 }

@@ -3,6 +3,5 @@ import { getMyOrders } from "@/services/order/order.service";
 
 export default async function MyOrders() {
   const orders = await getMyOrders();
-  console.log({ orders });
   return <MyOrdersPage orders={orders.data} />;
 }

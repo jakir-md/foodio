@@ -18,19 +18,47 @@ export interface Order {
   items: OrderItem[];
 }
 
-const STEPS: OrderStatus[] = ["PENDING", "PREPARING", "READY", "COMPLETED"];
+export const STEPS: OrderStatus[] = [
+  "PENDING",
+  "PREPARING",
+  "READY",
+  "COMPLETED",
+];
 
 const StatusBadge = ({ status }: { status: OrderStatus }) => {
-  if (status === "COMPLETED") {
-    return (
-      <span className="px-3 py-1 bg-[#E5F5E8] text-[#13322B] text-xs font-semibold rounded-md">
-        Completed
-      </span>
-    );
-  }
+  const statusConfig: Record<
+    OrderStatus,
+    { bg: string; text: string; label: string }
+  > = {
+    PENDING: {
+      bg: "bg-[#FFF8EB]",
+      text: "text-[#B87503]",
+      label: "Pending",
+    },
+    PREPARING: {
+      bg: "bg-[#EBF5FF]",
+      text: "text-[#1E40AF]",
+      label: "Preparing",
+    },
+    READY: {
+      bg: "bg-[#F4EEFF]",
+      text: "text-[#6B21A8]",
+      label: "Ready",
+    },
+    COMPLETED: {
+      bg: "bg-[#E5F5E8]",
+      text: "text-[#13322B]",
+      label: "Completed",
+    },
+  };
+
+  const config = statusConfig[status] || statusConfig.PENDING;
+
   return (
-    <span className="px-3 py-1 bg-[#FFF8EB] text-[#B87503] text-xs font-semibold rounded-md">
-      Pending
+    <span
+      className={`px-3 py-1 text-xs font-semibold rounded-md whitespace-nowrap ${config.bg} ${config.text}`}
+    >
+      {config.label}
     </span>
   );
 };
