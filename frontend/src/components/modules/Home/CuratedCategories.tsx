@@ -57,7 +57,7 @@ export default function CuratedCategories({ items }: { items: IMenuItem[] }) {
   };
 
   return (
-    <section className="max-w-360 mx-auto px-6 md:px-12 py-20">
+    <section className="max-w-360 mx-auto px-6 md:px-12 pb-20">
       <div className="text-center mb-12">
         <h2 className="text-4xl font-bold text-[#13322B] font-serif mb-4">
           Curated Categories
@@ -93,7 +93,7 @@ export default function CuratedCategories({ items }: { items: IMenuItem[] }) {
         })}
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-28 gap-y-16">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 gap-y-10">
         {filteredItems.map((item) => (
           <FoodItem
             key={item.id}

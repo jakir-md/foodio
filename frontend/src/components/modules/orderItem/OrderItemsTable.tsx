@@ -15,28 +15,7 @@ interface MenuItemsTableProps {
 }
 
 const OrderItemsTable = ({ orders }: MenuItemsTableProps) => {
-  const router = useRouter();
-  const [, startTransition] = useTransition();
   const [viewOrderDetails, setViewOrderDetails] = useState<IOrder | null>(null);
-
-  const handleRefresh = () => {
-    startTransition(() => {
-      router.refresh();
-    });
-  };
-
-  const handleStatus = async (orderId: string, status: OrderStatus) => {
-    try {
-      const result = await updateOrderStatus({ orderId, status });
-      if (result.success) {
-        toast.success(result.message);
-        handleRefresh();
-      }
-    } catch (error) {
-      console.log("Error while handling order status", error);
-    }
-  };
-
   const handleView = (order: IOrder) => {
     setViewOrderDetails(order);
   };
@@ -51,6 +30,7 @@ const OrderItemsTable = ({ orders }: MenuItemsTableProps) => {
         getRowKey={(order) => order.id!}
         emptyMessage="No Order Found"
       />
+      <div className="mb-10"></div>
       <OrderDetailsModal
         order={viewOrderDetails!}
         open={!!viewOrderDetails}

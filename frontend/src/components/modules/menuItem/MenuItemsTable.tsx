@@ -94,8 +94,8 @@ const MenuItemsTable = ({
         </div>
 
         <TablePagination
-          currentPage={meta.page || 1}
-          totalPages={meta.totalPages || 1}
+          currentPage={meta?.page || 1}
+          totalPages={meta?.totalPages || 1}
         />
       </div>
 

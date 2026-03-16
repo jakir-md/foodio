@@ -103,7 +103,7 @@ const CategoryTable = ({
         handleToggle={handleToggle}
         title="Category"
       />
-
+      <div className="mb-5"></div>
       <ManagementTable
         data={menus}
         columns={categoryColumns}

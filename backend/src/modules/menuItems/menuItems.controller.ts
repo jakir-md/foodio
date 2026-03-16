@@ -28,19 +28,19 @@ export class MenuItemsController {
   async getAllMenuItems(
     @Query("search") search?: string,
     @Query("categoryId") categoryId?: string,
-    @Query("isAvailable") isAvailable?: string,
+    @Query("sort") sort?: string,
     @Query("page") page: string = "1",
     @Query("limit") limit: string = "10",
   ) {
     const pageNumber = Number(page);
     const limitNumber = Number(limit);
 
-    console.log({pageNumber, limitNumber});
+    console.log({ search, categoryId, sort, page, limit });
 
     const result = await this.menuItemsService.findAll({
       search,
       categoryId,
-      isAvailable,
+      sort,
       page: pageNumber,
       limit: limitNumber,
     });

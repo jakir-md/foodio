@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 export default function HeroSection() {
   return (
@@ -25,7 +26,10 @@ export default function HeroSection() {
             ingredients, exquisite recipes, delivered to your door.
           </p>
 
-          <button className="flex items-center gap-2 px-8 py-4 bg-[#13322B] text-white rounded-full font-medium hover:bg-[#1a453b] transition-all shadow-xl shadow-[#13322B]/20 hover:-translate-y-1">
+          <Link
+            href={"/food-menu"}
+            className="flex w-45 items-center gap-2 px-8 py-4 bg-[#13322B] text-white rounded-full font-medium hover:bg-[#1a453b] transition-all shadow-xl shadow-[#13322B]/20 hover:-translate-y-1"
+          >
             View Menu
             <svg
               className="w-4 h-4"
@@ -40,7 +44,7 @@ export default function HeroSection() {
                 d="M14 5l7 7m0 0l-7 7m7-7H3"
               />
             </svg>
-          </button>
+          </Link>
         </div>
 
         <div className="w-full lg:w-[45%] relative lg:mt-0 flex justify-center">
@@ -52,7 +56,7 @@ export default function HeroSection() {
               width={400}
             />
           </div>
-          <div className="absolute top-10 -right-8 md:-right-12 bg-white p-4 rounded-xl shadow-2xl flex items-center gap-4 animate-bounce-slow">
+          <div className="absolute -top-40 -right-18 md:-right-1 bg-white p-4 rounded-xl shadow-2xl flex items-center gap-4 animate-bounce-slow">
             <div className="w-12 h-12 bg-orange-50 rounded-lg flex items-center justify-center text-2xl">
               🔥
             </div>
@@ -62,7 +66,7 @@ export default function HeroSection() {
             </div>
           </div>
 
-          <div className="absolute bottom-10 -left-8 md:-left-12 bg-white p-4 rounded-xl shadow-2xl flex items-center gap-4">
+          <div className="absolute -bottom-50 -left-8 md:-left-12 bg-white p-4 rounded-xl shadow-2xl flex items-center gap-4">
             <div className="w-12 h-12 bg-green-50 rounded-lg flex items-center justify-center text-xl">
               ⏱️
             </div>

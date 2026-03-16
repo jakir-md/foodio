@@ -5,7 +5,7 @@ import DashboardSidebarContent from "./DashboardSidebarContent";
 
 const DashboardSidebar =() => {
   const navItems: NavSection[] = adminNavItems;
-  const dashboardHome = "/admin/dashboard";
+  const dashboardHome = "/";
 
   return (
     <DashboardSidebarContent

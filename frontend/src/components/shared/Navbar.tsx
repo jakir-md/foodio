@@ -28,6 +28,7 @@ export default function Navbar() {
     fetchInfo();
   }, []);
 
+  console.log("user info", userInfo);
   const handleLogout = async () => {
     setUserInfo(null);
     await logoutUser();
@@ -40,6 +41,14 @@ export default function Navbar() {
     { name: "Food Menu", href: "/food-menu" },
     { name: "My Orders", href: "/my-orders" },
   ];
+
+  const adminPopOverLinks = [
+    { name: "Orders", href: "/admin/dashboard/orders" },
+    { name: "Dashboard", href: "/admin/dashboard/menu-items" },
+  ];
+
+  const userPopOverLinks = [{ name: "Orders", href: "/my-orders" }];
+
   return (
     <header className="absolute top-0 left-0 w-full z-50 flex justify-between items-center px-6 md:px-12 py-6 max-w-360 mx-auto right-0">
       <div className="flex items-center gap-2">
@@ -111,10 +120,36 @@ export default function Navbar() {
                 </DropdownMenuLabel>
 
                 <div className="px-1">
-                  <DropdownMenuItem className="flex items-center justify-between cursor-pointer py-2 px-2 rounded-md bg-gray-50 focus:bg-gray-100">
-                    <span className="text-sm text-gray-800">Orders</span>
-                    <Check className="w-4 h-4 text-gray-800" />
-                  </DropdownMenuItem>
+                  {userInfo.role === "ADMIN" &&
+                    adminPopOverLinks.map((item) => (
+                      <DropdownMenuItem
+                        key={item.href}
+                        asChild
+                        className="flex items-center justify-between cursor-pointer py-2 px-2 rounded-md  hover:bg-gray-100"
+                      >
+                        <Link
+                          href={item.href}
+                          className="w-full cursor-pointer"
+                        >
+                          {item.name}
+                        </Link>
+                      </DropdownMenuItem>
+                    ))}
+                  {userInfo.role === "USER" &&
+                    userPopOverLinks.map((item) => (
+                      <DropdownMenuItem
+                        key={item.href}
+                        asChild
+                        className="flex items-center justify-between cursor-pointer py-2 px-2 rounded-md  hover:bg-gray-100"
+                      >
+                        <Link
+                          href={item.href}
+                          className="w-full cursor-pointer"
+                        >
+                          {item.name}
+                        </Link>
+                      </DropdownMenuItem>
+                    ))}
                 </div>
 
                 <DropdownMenuSeparator className="my-2 bg-gray-100" />

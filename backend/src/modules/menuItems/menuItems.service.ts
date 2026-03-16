@@ -41,21 +41,25 @@ export class MenuItemsService {
   async findAll(query: {
     search?: string;
     categoryId?: string;
-    isAvailable?: string;
+    sort?: string;
     page: number;
     limit: number;
   }) {
-    const { search, categoryId, isAvailable, page, limit } = query;
+    const { search, categoryId, sort, page, limit } = query;
     const whereClause: any = {};
 
-    if (search) {
+    if (search !== "undefined") {
       whereClause.name = { contains: search, mode: "insensitive" };
     }
-    if (categoryId) {
+    if (categoryId !== "undefined") {
       whereClause.categoryId = categoryId;
     }
-    if (isAvailable !== undefined) {
-      whereClause.isAvailable = isAvailable === "true";
+    if (sort === "availability") {
+      whereClause.isAvailable = true;
+    }
+    let orderByClause: any = { createdAt: "desc" };
+    if (sort === "price") {
+      orderByClause = { price: "desc" };
     }
 
     const skip = (page - 1) * limit;
@@ -66,7 +70,7 @@ export class MenuItemsService {
         where: whereClause,
         skip,
         take,
-        orderBy: { createdAt: "desc" },
+        orderBy: orderByClause,
         select: {
           category: {
             select: {

@@ -17,12 +17,12 @@ export default function OrderStatusDropdown({
 
   const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newStatus = e.target.value;
-
     startTransition(async () => {
       try {
+        const toastId = toast.loading("Status Updating..");
         const result = await updateOrderStatus({ orderId, newStatus });
         if (result.success) {
-          toast.success("Order Status Updated.");
+          toast.success("Order Status Updated.", { id: toastId });
         }
       } catch (error) {
         console.error("Failed to update status", error);

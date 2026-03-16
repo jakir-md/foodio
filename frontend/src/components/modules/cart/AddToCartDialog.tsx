@@ -97,7 +97,7 @@ export default function AddToCartDialog({
           </DialogClose>
           <button
             onClick={handleAdd}
-            className="px-6 py-2.5 rounded-full bg-[#13322B] text-white font-medium hover:bg-[#1a453b] transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-[#13322B] focus:ring-offset-2"
+            className="px-6 py-2.5 hover:cursor-pointer rounded-full bg-[#13322B] text-white font-medium hover:bg-[#1a453b] transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-[#13322B] focus:ring-offset-2"
           >
             Add to cart
           </button>

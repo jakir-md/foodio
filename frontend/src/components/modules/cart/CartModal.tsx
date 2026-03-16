@@ -10,6 +10,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { placeOrder } from "@/services/order/order.service";
+import { toast } from "sonner";
 
 interface CartModalProps {
   isOpen: boolean;
@@ -34,6 +35,7 @@ export default function CartModal({ isOpen, onClose }: CartModalProps) {
 
   const handleConfirmOrder = async () => {
     setIsSubmitting(true);
+    const toastId = toast.loading("Placing order..");
     try {
       const orderPayload = items.map((item) => ({
         menuItemId: item.id,
@@ -42,11 +44,13 @@ export default function CartModal({ isOpen, onClose }: CartModalProps) {
 
       const result = await placeOrder(orderPayload);
       if (result.success) {
+        toast.success("Order Placed Successfully.", { id: toastId });
         clearCart();
         onClose();
       }
     } catch (error) {
       console.error("Order failed", error);
+      toast.error("Sorry! Order Again.", { id: toastId });
     } finally {
       setIsSubmitting(false);
     }
@@ -69,14 +73,12 @@ export default function CartModal({ isOpen, onClose }: CartModalProps) {
           </div>
         </DialogHeader>
 
-        {/* Scrollable Item List */}
         <div className="flex flex-col max-h-[50vh] overflow-y-auto pr-2 -mr-2 custom-scrollbar">
           {items.map((item) => (
             <div
               key={item.id}
               className="flex gap-4 py-5 border-b border-gray-100"
             >
-              {/* Product Image */}
               <div className="w-12 h-12 rounded-full overflow-hidden bg-gray-100 flex-shrink-0 border border-gray-200">
                 <img
                   src={item.image}
@@ -85,7 +87,6 @@ export default function CartModal({ isOpen, onClose }: CartModalProps) {
                 />
               </div>
 
-              {/* Product Details */}
               <div className="flex-1 flex flex-col">
                 <div className="flex justify-between items-start">
                   <h3 className="text-[14px] font-medium text-gray-900 leading-tight pr-4">
@@ -105,7 +106,6 @@ export default function CartModal({ isOpen, onClose }: CartModalProps) {
                 </p>
 
                 <div className="flex justify-between items-end mt-3">
-                  {/* Quantity Controls connected to Zustand */}
                   <div className="flex items-center gap-2.5">
                     <button
                       onClick={() => updateQuantity(item.id, item.quantity - 1)}
@@ -143,7 +143,6 @@ export default function CartModal({ isOpen, onClose }: CartModalProps) {
           )}
         </div>
 
-        {/* Total Section */}
         <div className="flex items-center justify-between py-5 border-t border-gray-100 mt-2">
           <span className="text-base font-bold text-gray-900">
             Total Amount :
@@ -153,18 +152,17 @@ export default function CartModal({ isOpen, onClose }: CartModalProps) {
           </span>
         </div>
 
-        {/* Footer Actions */}
         <div className="flex justify-end gap-3 pt-2">
           <button
             onClick={onClose}
-            className="px-5 py-2.5 rounded-full border border-[#13322B] text-[#13322B] text-sm font-medium hover:bg-[#13322B]/5 transition-colors focus:outline-none focus:ring-2 focus:ring-[#13322B]/20"
+            className="px-5 py-2.5 hover:cursor-pointer rounded-full border border-[#13322B] text-[#13322B] text-sm font-medium hover:bg-[#13322B]/5 transition-colors focus:outline-none focus:ring-2 focus:ring-[#13322B]/20"
           >
             Cancel
           </button>
           <button
             onClick={handleConfirmOrder}
             disabled={items.length === 0 || isSubmitting}
-            className="px-5 py-2.5 rounded-full bg-[#13322B] text-white text-sm font-medium hover:bg-[#1a453b] transition-colors shadow-sm disabled:opacity-70 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-[#13322B] focus:ring-offset-2 flex items-center justify-center min-w-[140px]"
+            className="px-5 py-2.5 hover:cursor-pointer rounded-full bg-[#13322B] text-white text-sm font-medium hover:bg-[#1a453b] transition-colors shadow-sm disabled:opacity-70 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-[#13322B] focus:ring-offset-2 flex items-center justify-center min-w-[140px]"
           >
             {isSubmitting ? "Processing..." : "Confirm Order"}
           </button>

@@ -28,7 +28,7 @@ export default function MenuItemPage({ menus, categories }: IMenuItemsProps) {
   return (
     <>
       <ManagementPageHeader title="Menu Items" />
-      {activeTab === "menuItems" && (
+      {activeTab === "menuItems" && menus.data.length > 0 && (
         <MenuItemsTable
           meta={menus.meta}
           menus={menus.data}

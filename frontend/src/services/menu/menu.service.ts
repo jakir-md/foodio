@@ -45,16 +45,45 @@ export const addNewMenu = async (
   }
 };
 
-export const getAllMenu = async ({
-  page,
-  limit,
-}: {
-  page: string;
-  limit: string;
-}): Promise<any> => {
+export const getAllMenu = async (page = "1", limit = "10"): Promise<any> => {
   try {
     const res = await serverFetch.get(
       `/menu-items?page=${page}&limit=${limit}`,
+    );
+    const result = await res.json();
+    return result;
+  } catch (error: any) {
+    // Re-throw NEXT_REDIRECT errors so Next.js can handle them
+    if (error?.digest?.startsWith("NEXT_REDIRECT")) {
+      throw error;
+    }
+    console.log(error);
+    return {
+      data: [],
+      success: false,
+      message: `${process.env.NODE_ENV === "development" ? error.message : "Menu retrival failed. Please try again."}`,
+    };
+  }
+};
+
+interface IQueryInfo {
+  search: string | undefined;
+  sort: string | undefined;
+  page: string;
+  limit: string;
+  categoryId: string | undefined;
+}
+
+export const getAllMenuForUser = async ({
+  search,
+  sort,
+  page,
+  limit,
+  categoryId,
+}: IQueryInfo): Promise<any> => {
+  try {
+    const res = await serverFetch.get(
+      `/menu-items?page=${page}&limit=${limit}&categoryId=${categoryId}&sort=${sort}&search=${search}`,
     );
     const result = await res.json();
     return result;
