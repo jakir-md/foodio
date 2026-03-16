@@ -11,12 +11,15 @@ import { ICategory } from "./categoryColumn";
 import EditMenuItemModal from "./EditMenuItemModal";
 import { toast } from "sonner";
 import { deleteMenu } from "@/services/menu/menu.service";
+import TablePagination from "@/components/shared/TablePagination";
+import { IMeta } from "./MenuItemPage";
 
 interface MenuItemsTableProps {
   menus: IMenuItem[];
   activeTab: string;
   handleToggle: (tab: "categories" | "menuItems") => void;
   categories: ICategory[];
+  meta: IMeta;
 }
 
 const MenuItemsTable = ({
@@ -24,6 +27,7 @@ const MenuItemsTable = ({
   activeTab,
   handleToggle,
   categories,
+  meta,
 }: MenuItemsTableProps) => {
   const router = useRouter();
   const [, startTransition] = useTransition();
@@ -70,20 +74,31 @@ const MenuItemsTable = ({
 
   return (
     <>
-      <Toggler
-        handleOnclick={() => setAddMenu(true)}
-        activeTab={activeTab}
-        handleToggle={handleToggle}
-        title="Item"
-      />
-      <ManagementTable
-        data={menus}
-        columns={menuItemsColumns}
-        onEdit={handleEdit}
-        onDelete={handleDelete}
-        getRowKey={(admin) => admin.id!}
-        emptyMessage="No menu items found"
-      />
+      <div className="flex flex-col gap-6">
+        <Toggler
+          handleOnclick={() => setAddMenu(true)}
+          activeTab={activeTab}
+          handleToggle={handleToggle}
+          title="Item"
+        />
+
+        <div className="min-h-60">
+          <ManagementTable
+            data={menus}
+            columns={menuItemsColumns}
+            onEdit={handleEdit}
+            onDelete={handleDelete}
+            getRowKey={(admin) => admin.id!}
+            emptyMessage="No menu items found"
+          />
+        </div>
+
+        <TablePagination
+          currentPage={meta.page || 1}
+          totalPages={meta.totalPages || 1}
+        />
+      </div>
+
       <AddNewItemModal
         open={addMenu}
         onClose={() => setAddMenu(false)}

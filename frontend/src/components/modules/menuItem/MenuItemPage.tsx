@@ -6,8 +6,18 @@ import ManagementPageHeader from "@/components/shared/ManagementPageHeader";
 import CategoryTable from "./CategoriesTable";
 import { ICategory } from "./categoryColumn";
 
+export interface IMeta {
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+}
+
 interface IMenuItemsProps {
-  menus: IMenuItem[];
+  menus: {
+    data: IMenuItem[];
+    meta: IMeta;
+  };
   categories: ICategory[];
 }
 
@@ -20,7 +30,8 @@ export default function MenuItemPage({ menus, categories }: IMenuItemsProps) {
       <ManagementPageHeader title="Menu Items" />
       {activeTab === "menuItems" && (
         <MenuItemsTable
-          menus={menus}
+          meta={menus.meta}
+          menus={menus.data}
           handleToggle={setActiveTab}
           activeTab={activeTab}
           categories={categories}

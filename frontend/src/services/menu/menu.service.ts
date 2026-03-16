@@ -45,9 +45,17 @@ export const addNewMenu = async (
   }
 };
 
-export const getAllMenu = async (): Promise<any> => {
+export const getAllMenu = async ({
+  page,
+  limit,
+}: {
+  page: string;
+  limit: string;
+}): Promise<any> => {
   try {
-    const res = await serverFetch.get("/menu-items");
+    const res = await serverFetch.get(
+      `/menu-items?page=${page}&limit=${limit}`,
+    );
     const result = await res.json();
     return result;
   } catch (error: any) {

@@ -38,42 +38,66 @@ export class MenuItemsService {
     });
   }
 
-  async findAll(query?: {
+  async findAll(query: {
     search?: string;
     categoryId?: string;
     isAvailable?: string;
+    page: number;
+    limit: number;
   }) {
-    const whereClause: Prisma.MenuItemWhereInput = {};
+    const { search, categoryId, isAvailable, page, limit } = query;
+    const whereClause: any = {};
 
-    if (query?.search) {
-      whereClause.name = { contains: query.search, mode: "insensitive" };
+    if (search) {
+      whereClause.name = { contains: search, mode: "insensitive" };
+    }
+    if (categoryId) {
+      whereClause.categoryId = categoryId;
+    }
+    if (isAvailable !== undefined) {
+      whereClause.isAvailable = isAvailable === "true";
     }
 
-    if (query?.categoryId) {
-      whereClause.categoryId = query.categoryId;
-    }
+    const skip = (page - 1) * limit;
+    const take = limit;
 
-    if (query?.isAvailable !== undefined) {
-      whereClause.isAvailable = query.isAvailable === "true";
-    }
-
-    return this.prisma.menuItem.findMany({
-      where: whereClause,
-      select: {
-        category: {
-          select: {
-            name: true,
-            id: true,
+    const [data, total] = await Promise.all([
+      this.prisma.menuItem.findMany({
+        where: whereClause,
+        skip,
+        take,
+        orderBy: { createdAt: "desc" },
+        select: {
+          category: {
+            select: {
+              name: true,
+              id: true,
+            },
           },
+          id: true,
+          isAvailable: true,
+          name: true,
+          description: true,
+          image: true,
+          price: true,
         },
-        id: true,
-        isAvailable: true,
-        name: true,
-        description: true,
-        image: true,
-        price: true,
+      }),
+      this.prisma.menuItem.count({
+        where: whereClause,
+      }),
+    ]);
+
+    const totalPages = Math.ceil(total / limit);
+
+    return {
+      data,
+      meta: {
+        total,
+        page,
+        limit,
+        totalPages,
       },
-    });
+    };
   }
 
   async findOne(id: string) {
