@@ -28,7 +28,6 @@ export const loginUser = async (
       password: formData.get("password"),
     };
 
-    console.log("login payload", payload);
     if (zodValidator(payload, loginSchema).success === false) {
       return zodValidator(payload, loginSchema);
     }
@@ -61,8 +60,6 @@ export const loginUser = async (
     if (!accessTokenObject) {
       throw new Error("Tokens not found in cookies");
     }
-
-    console.log({ accessTokenObject });
     await setCookie("accessToken", accessTokenObject.accessToken, {
       secure: true,
       httpOnly: true,

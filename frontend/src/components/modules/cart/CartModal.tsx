@@ -40,8 +40,6 @@ export default function CartModal({ isOpen, onClose }: CartModalProps) {
         quantity: item.quantity,
       }));
 
-      console.log({ orderPayload });
-
       const result = await placeOrder(orderPayload);
       if (result.success) {
         clearCart();

@@ -15,7 +15,6 @@ export default function Toggler({
   activeTab,
   title,
 }: IMenuTogglerProps) {
-  console.log({ activeTab });
   return (
     <div className="flex items-center justify-between w-full">
       <div className="flex bg-[#F3F0E9] rounded-full p-1">

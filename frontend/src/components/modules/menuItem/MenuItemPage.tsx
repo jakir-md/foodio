@@ -15,7 +15,6 @@ export default function MenuItemPage({ menus, categories }: IMenuItemsProps) {
   const [activeTab, setActiveTab] = useState<"menuItems" | "categories">(
     "menuItems",
   );
-  console.log({ menus });
   return (
     <>
       <ManagementPageHeader title="Menu Items" />

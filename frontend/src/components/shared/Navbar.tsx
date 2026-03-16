@@ -29,7 +29,6 @@ export default function Navbar() {
   }, []);
 
   const handleLogout = async () => {
-    console.log("logged out clicked");
     setUserInfo(null);
     await logoutUser();
   };

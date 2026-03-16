@@ -10,7 +10,6 @@ export const placeOrder = async (payload: any): Promise<any> => {
       },
     });
     const result = await res.json();
-    console.log("result from order", result);
     return result;
   } catch (error: any) {
     // Re-throw NEXT_REDIRECT errors so Next.js can handle them
@@ -65,7 +64,6 @@ export const getAllOrders = async (): Promise<any> => {
 };
 
 export const updateOrderStatus = async (payload: any): Promise<any> => {
-  console.log("order status", payload);
   try {
     const res = await serverFetch.post("/orders/update-status", {
       body: JSON.stringify(payload),

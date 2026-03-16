@@ -64,7 +64,7 @@ const MenuItemsTable = ({
         toast.error(result.message || "Failed to delete Menu", { id: toastId });
       }
     } catch (error) {
-      console.log("Menu Deletion Error");
+      console.log("Menu Deletion Error", error);
     }
   };
 

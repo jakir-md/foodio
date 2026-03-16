@@ -16,7 +16,6 @@ const CATEGORIES = [
 
 export default function CuratedCategories({ items }: { items: IMenuItem[] }) {
   if (!items) return null;
-  console.log({ items });
   const [activeCategory, setActiveCategory] = useState(CATEGORIES[0].label);
   const [quantity, setQuantity] = useState(1);
   const [currentItem, setCurrentItem] = useState<IMenuItem | null>(null);
@@ -39,7 +38,6 @@ export default function CuratedCategories({ items }: { items: IMenuItem[] }) {
       setLoginOpen(true);
       return;
     }
-    console.log("item form ", item);
     setCurrentItem(item);
   };
 
@@ -95,7 +93,7 @@ export default function CuratedCategories({ items }: { items: IMenuItem[] }) {
         })}
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 gap-y-16">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-28 gap-y-16">
         {filteredItems.map((item) => (
           <FoodItem
             key={item.id}

@@ -11,21 +11,12 @@ const serverFetchHelper = async (
 ): Promise<Response> => {
   const { headers, ...restOptions } = options;
   const accessToken = await getCookie("accessToken");
-  console.log("accessToken", { accessToken });
-  // console.log(accessToken,'accessToken in server-fetch');
-
-  //   //to stop recursion loop
-  //   if (endpoint !== "/auth/refresh-token") {
-  //     await getNewAccessToken();
-  //   }
 
   const response = await fetch(`${BACKEND_API_URL}${endpoint}`, {
     credentials: "include",
     headers: {
       Cookie: accessToken ? `accessToken=${accessToken}` : "",
       ...headers,
-      // ...(accessToken ? { "Authorization": `Bearer ${accessToken}` } : {}),
-      // ...(accessToken ? { "Authorization": accessToken } : {}),
     },
     ...restOptions,
   });

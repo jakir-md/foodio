@@ -13,7 +13,6 @@ export class MenuItemsService {
 
   async create(data: CreateMenuItemDto) {
     const { categoryId, ...restOfData } = data;
-    console.log("categoryId from services", categoryId);
     return this.prisma.menuItem.create({
       data: {
         ...restOfData,
@@ -26,7 +25,6 @@ export class MenuItemsService {
 
   async updateItem(data: any) {
     const { menuId, categoryId, ...restOfData } = data;
-    console.log("categoryId from services", categoryId);
     return this.prisma.menuItem.update({
       where: {
         id: menuId,

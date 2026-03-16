@@ -15,7 +15,6 @@ interface MenuItemsTableProps {
 }
 
 const OrderItemsTable = ({ orders }: MenuItemsTableProps) => {
-  console.log({ orders });
   const router = useRouter();
   const [, startTransition] = useTransition();
   const [viewOrderDetails, setViewOrderDetails] = useState<IOrder | null>(null);

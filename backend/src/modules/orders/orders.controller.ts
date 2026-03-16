@@ -12,7 +12,6 @@ export class OrdersController {
   @Post()
   createOrder(@Req() req, @Body() body: CreateOrderDto) {
     const userId = req.user.id;
-    console.log({ carts: body.cartItems });
     this.ordersService.createOrder(userId, body.cartItems);
     return {
       success: true,

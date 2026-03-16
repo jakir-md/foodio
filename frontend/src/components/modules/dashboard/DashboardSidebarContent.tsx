@@ -21,8 +21,6 @@ const DashboardSidebarContent = ({
 }: DashboardSidebarContentProps) => {
   const pathname = usePathname();
   const handleLogout = async () => {
-    console.log("logged out clicked");
-    // setUserInfo(null);
     await logoutUser();
   };
   return (

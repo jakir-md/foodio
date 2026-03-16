@@ -53,7 +53,6 @@ export default function FoodMenu({ foodmenu }: { foodmenu: IMenuItem[] }) {
       setLoginOpen(true);
       return;
     }
-    console.log("item form ", item);
     setCurrentItem(item);
   };
 

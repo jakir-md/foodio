@@ -30,7 +30,6 @@ export const addNewMenu = async (
     });
 
     const result = await res.json();
-    console.log("result from menu item", result);
     return result;
   } catch (error: any) {
     // Re-throw NEXT_REDIRECT errors so Next.js can handle them
@@ -50,7 +49,6 @@ export const getAllMenu = async (): Promise<any> => {
   try {
     const res = await serverFetch.get("/menu-items");
     const result = await res.json();
-    console.log({ result });
     return result;
   } catch (error: any) {
     // Re-throw NEXT_REDIRECT errors so Next.js can handle them
@@ -95,7 +93,6 @@ export const editMenu = async (
     newFormData.append("file", file);
   }
 
-  console.log({ file, payload });
   try {
     const res = await serverFetch.patch("/menu-items", {
       body: newFormData,

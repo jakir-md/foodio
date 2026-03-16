@@ -21,7 +21,6 @@ export default function OrderStatusDropdown({
     startTransition(async () => {
       try {
         const result = await updateOrderStatus({ orderId, newStatus });
-        console.log("result from order status", result);
         if (result.success) {
           toast.success("Order Status Updated.");
         }

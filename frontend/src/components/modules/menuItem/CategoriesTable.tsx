@@ -47,10 +47,8 @@ const CategoryTable = ({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("add cat hit");
     try {
       const result = await addNewCategory(categoryName);
-      console.log({ result });
       if (result.success) {
         toast.success("Category Added Successfully.");
         setAddCategory(false);

@@ -8,8 +8,8 @@ export interface FoodItemProps {
 export default function FoodItem({ item, setCurrentItem }: FoodItemProps) {
   if (!item) return null;
   return (
-    <div className="relative pt-16 pl-8 pb-4 w-full max-w-85 mx-auto">
-      <div className="relative bg-[#FEF7EA] rounded-4xl p-8 pt-28 h-full min-h-80 flex flex-col justify-between shadow-sm">
+    <div className="relative pt-16 pl-8 pb-4 w-full max-w-100 mx-auto">
+      <div className="relative bg-[#FEF7EA] rounded-4xl w-70 p-8 pt-20 h-full min-h-80 flex flex-col justify-between shadow-sm">
         <div className="absolute -top-12 -left-12 w-60 h-60 rounded-full">
           <img
             src={item.image}
@@ -17,7 +17,7 @@ export default function FoodItem({ item, setCurrentItem }: FoodItemProps) {
             className="w-full h-full object-cover"
           />
         </div>
-        <div className="mb-6 pt-10">
+        <div className="mb-6 pt-30">
           {" "}
           <h3 className="text-xl font-bold text-[#13322B] leading-tight mb-2">
             {item.name}
@@ -33,7 +33,7 @@ export default function FoodItem({ item, setCurrentItem }: FoodItemProps) {
 
       <button
         onClick={() => setCurrentItem(item)}
-        className="absolute -bottom-3 right-0 bg-[#13322B] text-white px-6 py-3 rounded-4xl rounded-tr-none hover:bg-[#1a453b] transition-colors flex items-center gap-3 text-base font-medium z-20 shadow-2xl"
+        className="absolute -bottom-3 -right-26 bg-[#13322B] text-white px-6 py-3 rounded-4xl rounded-tr-none hover:bg-[#1a453b] transition-colors flex items-center gap-3 text-base font-medium z-20 shadow-2xl"
       >
         Add to Cart
         <svg
