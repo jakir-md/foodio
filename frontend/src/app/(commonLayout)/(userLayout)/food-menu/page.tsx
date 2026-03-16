@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import FoodMenu from "@/components/modules/Home/FoodMenu";
 import { getAllMenu } from "@/services/menu/menu.service";
 

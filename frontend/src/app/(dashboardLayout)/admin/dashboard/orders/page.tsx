@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import OrderItemsTable from "@/components/modules/orderItem/OrderItemsTable";
 import { getAllOrders } from "@/services/order/order.service";
 
