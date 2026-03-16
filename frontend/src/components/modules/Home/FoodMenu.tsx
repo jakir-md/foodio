@@ -1,10 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import FoodItem from "./FoodItem";
 import { IMenuItem } from "../menuItem/menuItemsColumn";
 import AddToCartDialog from "../cart/AddToCartDialog";
 import { useCartStore } from "@/store/useCartStore";
+import { LoginPromptModal } from "@/components/shared/LoginPromptDialog";
+import { getUserInfo, UserInfo } from "@/services/auth/getUserInfo";
 
 const CATEGORIES = ["All", "Starters", "Main Courses", "Desserts"];
 
@@ -13,6 +15,7 @@ export default function FoodMenu({ foodmenu }: { foodmenu: IMenuItem[] }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [quantity, setQuantity] = useState(1);
   const [currentItem, setCurrentItem] = useState<IMenuItem | null>(null);
+  const [loginOpen, setLoginOpen] = useState(false);
 
   const filteredMenu = foodmenu.filter((item) => {
     const matchesCategory =
@@ -22,7 +25,14 @@ export default function FoodMenu({ foodmenu }: { foodmenu: IMenuItem[] }) {
       .includes(searchQuery.toLowerCase());
     return matchesCategory && matchesSearch;
   });
-
+  const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
+  useEffect(() => {
+    async function fetchInfo() {
+      const info = await getUserInfo();
+      setUserInfo(info);
+    }
+    fetchInfo();
+  }, []);
   const addItem = useCartStore((state) => state.addItem);
 
   const handleModalAddToCart = () => {
@@ -36,6 +46,15 @@ export default function FoodMenu({ foodmenu }: { foodmenu: IMenuItem[] }) {
     });
     setCurrentItem(null);
     setQuantity(1);
+  };
+
+  const handleCurrentItem = (item: IMenuItem) => {
+    if (!userInfo?.email) {
+      setLoginOpen(true);
+      return;
+    }
+    console.log("item form ", item);
+    setCurrentItem(item);
   };
 
   return (
@@ -116,7 +135,7 @@ export default function FoodMenu({ foodmenu }: { foodmenu: IMenuItem[] }) {
               <FoodItem
                 key={item.id}
                 item={item}
-                setCurrentItem={setCurrentItem}
+                setCurrentItem={handleCurrentItem}
               />
             ))}
         </div>
@@ -138,6 +157,11 @@ export default function FoodMenu({ foodmenu }: { foodmenu: IMenuItem[] }) {
         productName={currentItem?.name}
         setQuantity={setQuantity}
         onAddToCart={handleModalAddToCart}
+      />
+
+      <LoginPromptModal
+        isOpen={loginOpen}
+        onClose={() => setLoginOpen(false)}
       />
     </div>
   );

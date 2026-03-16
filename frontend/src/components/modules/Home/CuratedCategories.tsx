@@ -1,10 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import FoodItem, { FoodItemProps } from "./FoodItem";
 import AddToCartDialog from "../cart/AddToCartDialog";
 import { useCartStore } from "@/store/useCartStore";
 import { IMenuItem } from "../menuItem/menuItemsColumn";
+import { getUserInfo, UserInfo } from "@/services/auth/getUserInfo";
+import { LoginPromptModal } from "@/components/shared/LoginPromptDialog";
 
 const CATEGORIES = [
   { id: "starters", label: "Starters", icon: "🍽️" },
@@ -18,9 +20,28 @@ export default function CuratedCategories({ items }: { items: IMenuItem[] }) {
   const [activeCategory, setActiveCategory] = useState(CATEGORIES[0].label);
   const [quantity, setQuantity] = useState(1);
   const [currentItem, setCurrentItem] = useState<IMenuItem | null>(null);
+  const [loginOpen, setLoginOpen] = useState(false);
   const filteredItems = items.filter(
     (item) => item.category.name === activeCategory,
   );
+
+  const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
+  useEffect(() => {
+    async function fetchInfo() {
+      const info = await getUserInfo();
+      setUserInfo(info);
+    }
+    fetchInfo();
+  }, []);
+
+  const handleCurrentItem = (item: IMenuItem) => {
+    if (!userInfo?.email) {
+      setLoginOpen(true);
+      return;
+    }
+    console.log("item form ", item);
+    setCurrentItem(item);
+  };
 
   const addItem = useCartStore((state) => state.addItem);
 
@@ -76,7 +97,11 @@ export default function CuratedCategories({ items }: { items: IMenuItem[] }) {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 gap-y-16">
         {filteredItems.map((item) => (
-          <FoodItem key={item.id} item={item} setCurrentItem={setCurrentItem} />
+          <FoodItem
+            key={item.id}
+            item={item}
+            setCurrentItem={handleCurrentItem}
+          />
         ))}
       </div>
 
@@ -96,6 +121,11 @@ export default function CuratedCategories({ items }: { items: IMenuItem[] }) {
         productName={currentItem?.name}
         setQuantity={setQuantity}
         onAddToCart={handleModalAddToCart}
+      />
+
+      <LoginPromptModal
+        isOpen={loginOpen}
+        onClose={() => setLoginOpen(false)}
       />
     </section>
   );

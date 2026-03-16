@@ -41,7 +41,11 @@ export class CategoriesController {
     @Param("id") id: string,
     @Body() data: UpdateCategoryDto,
   ) {
-    return this.categoriesService.update(id, data);
+    const result = await this.categoriesService.update(id, data);
+    return {
+      data: result,
+      success: true,
+    };
   }
 
   @Delete(":id")

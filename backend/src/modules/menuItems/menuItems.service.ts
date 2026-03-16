@@ -1,4 +1,8 @@
-import { Injectable } from "@nestjs/common";
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+} from "@nestjs/common";
 import { PrismaService } from "../../prisma/prisma.service";
 import { Prisma } from "@prisma/client";
 import { CreateMenuItemDto, UpdateMenuItemDto } from "./dto/menuItems.dto";
@@ -86,6 +90,24 @@ export class MenuItemsService {
   }
 
   async remove(id: string) {
-    return this.prisma.menuItem.delete({ where: { id } });
+    try {
+      await this.prisma.menuItem.delete({
+        where: { id },
+      });
+
+      return {
+        success: true,
+        message: "Menu item deleted successfully",
+      };
+    } catch (error: any) {
+      if (error.code === "P2003") {
+        throw new BadRequestException(
+          "Cannot delete this menu item because it is part of an existing order.",
+        );
+      }
+      throw new InternalServerErrorException(
+        "An unexpected error occurred while deleting the menu item.",
+      );
+    }
   }
 }

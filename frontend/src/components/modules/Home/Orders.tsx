@@ -171,7 +171,7 @@ export default function MyOrdersPage({ orders }: MyOrderProps) {
       </h1>
 
       <div className="flex flex-col gap-2">
-        {orders.map((order) => (
+        {orders && orders.map((order) => (
           <OrderCard key={order.id} order={order} />
         ))}
       </div>

@@ -29,6 +29,7 @@ export interface EditItemModalProps {
   onClose: () => void;
   categories: ICategory[];
   initialData?: IMenuItem | null;
+  onRefresh: () => void;
 }
 
 export default function EditMenuItemModal({
@@ -36,6 +37,7 @@ export default function EditMenuItemModal({
   onClose,
   initialData,
   categories,
+  onRefresh,
 }: EditItemModalProps) {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [name, setName] = useState("Pan-Seared Scallops");
@@ -68,14 +70,17 @@ export default function EditMenuItemModal({
       isAvailable,
       image: initialData?.image,
     };
-
+    onClose();
     try {
       const toastId = toast.loading("Updating Item..");
       const result = await editMenu(updatedData, selectedFile);
       if (result.success) {
         toast.success("Item Updated Successfully.", { id: toastId });
-        onClose();
-      }
+        onRefresh();
+      } else
+        toast.error(result.message || "Failed to delete the menu item.", {
+          id: toastId,
+        });
     } catch (error) {
       console.log(error);
     }
@@ -228,7 +233,7 @@ export default function EditMenuItemModal({
 
             <Button
               type="submit"
-              className="bg-[#13322B] text-white hover:bg-[#1a453b] px-6 rounded-full font-medium"
+              className="bg-[#13322B] hover:cursor-pointer text-white hover:bg-[#1a453b] px-6 rounded-full font-medium"
             >
               Save Changes
             </Button>

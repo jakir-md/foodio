@@ -66,14 +66,9 @@ export const getAllMenu = async (): Promise<any> => {
   }
 };
 
-export const deleteMenu = async (): Promise<any> => {
+export const deleteMenu = async (menuId: string): Promise<any> => {
   try {
-    const res = await serverFetch.delete("/menu", {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
+    const res = await serverFetch.delete(`/menu-items/${menuId}`);
     const result = await res.json();
     return result;
   } catch (error: any) {
@@ -100,7 +95,7 @@ export const editMenu = async (
     newFormData.append("file", file);
   }
 
-  console.log({file, payload})
+  console.log({ file, payload });
   try {
     const res = await serverFetch.patch("/menu-items", {
       body: newFormData,

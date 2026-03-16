@@ -9,6 +9,8 @@ import { IMenuItem, menuItemsColumns } from "./menuItemsColumn";
 import AddNewItemModal from "./AddNewItemModal";
 import { ICategory } from "./categoryColumn";
 import EditMenuItemModal from "./EditMenuItemModal";
+import { toast } from "sonner";
+import { deleteMenu } from "@/services/menu/menu.service";
 
 interface MenuItemsTableProps {
   menus: IMenuItem[];
@@ -48,18 +50,22 @@ const MenuItemsTable = ({
 
   const confirmDelete = async () => {
     if (!deletingMenu) return;
-
-    // setIsDeleting(true);
-    // const result = await softDeleteAdmin(deletingAdmin.id!);
-    // setIsDeleting(false);
-
-    // if (result.success) {
-    //   toast.success(result.message || "Menu deleted successfully");
-    //   setDeletingMenu(null);
-    //   handleRefresh();
-    // } else {
-    //   toast.error(result.message || "Failed to delete Menu");
-    // }
+    setDeletingMenu(null);
+    try {
+      const toastId = toast.loading("Deleting Menu..");
+      const result = await deleteMenu(deletingMenu.id!);
+      if (result.success) {
+        toast.success(result.message || "Menu deleted successfully", {
+          id: toastId,
+        });
+        setDeletingMenu(null);
+        handleRefresh();
+      } else {
+        toast.error(result.message || "Failed to delete Menu", { id: toastId });
+      }
+    } catch (error) {
+      console.log("Menu Deletion Error");
+    }
   };
 
   return (
@@ -99,6 +105,7 @@ const MenuItemsTable = ({
         isOpen={isEditing}
         onClose={() => setIsEditing(false)}
         categories={categories}
+        onRefresh={handleRefresh}
       />
     </>
   );

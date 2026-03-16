@@ -1,12 +1,14 @@
+import Image from "next/image";
+
 export default function HeroSection() {
   return (
-    <div className="relative min-h-screen w-full overflow-hidden">
+    <div className="relative min-h-90vh w-full overflow-hidden">
       <div className="absolute inset-0 z-0 flex">
         <div className="w-[55%] h-full bg-white"></div>
-        <div className="w-[45%] h-full bg-[#FFF9F0]"></div>
+        <div className="w-[45%] h-[90%] rounded-bl-[35%] bg-[#FFF9F0]"></div>
       </div>
 
-      <main className="relative z-10 max-w-360 mx-auto px-6 md:px-12 pt-40 pb-20 flex flex-col lg:flex-row items-center min-h-screen">
+      <main className="relative z-10 max-w-360 mx-auto px-6 md:px-12 pt-30 pb-20 flex flex-col lg:flex-row items-center min-h-screen">
         <div className="w-full lg:w-[55%] pr-10">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#FFF9F0] text-sm text-[#13322B] font-medium rounded-md mb-8">
             <span className="text-emerald-600">🧾</span> Food Ordering Service
@@ -41,15 +43,15 @@ export default function HeroSection() {
           </button>
         </div>
 
-        <div className="w-full lg:w-[45%] relative mt-16 lg:mt-0 flex justify-center">
-          <div className="relative w-full max-w-125 aspect-square rounded-full shadow-2xl overflow-hidden bg-white/50 backdrop-blur-sm">
-            <div className="w-full h-full rounded-full border-20 border-white overflow-hidden">
-              <div className="w-full h-full bg-gray-200 flex items-center justify-center text-gray-400 text-sm">
-                [ Insert plate image here ]
-              </div>
-            </div>
+        <div className="w-full lg:w-[45%] relative lg:mt-0 flex justify-center">
+          <div className="absolute right-25 -bottom-55">
+            <img
+              src="https://i.ibb.co.com/nq0V91mT/image-11.png"
+              alt="Plate Image"
+              height={400}
+              width={400}
+            />
           </div>
-
           <div className="absolute top-10 -right-8 md:-right-12 bg-white p-4 rounded-xl shadow-2xl flex items-center gap-4 animate-bounce-slow">
             <div className="w-12 h-12 bg-orange-50 rounded-lg flex items-center justify-center text-2xl">
               🔥

@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { IMenuItem } from "../menuItem/menuItemsColumn";
 
 export interface FoodItemProps {
@@ -7,7 +6,6 @@ export interface FoodItemProps {
 }
 
 export default function FoodItem({ item, setCurrentItem }: FoodItemProps) {
-  console.log({ item });
   if (!item) return null;
   return (
     <div className="relative pt-16 pl-8 pb-4 w-full max-w-85 mx-auto">

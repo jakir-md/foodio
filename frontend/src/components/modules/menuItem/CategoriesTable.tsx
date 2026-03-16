@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import Toggler from "./Toggler";
 import ManagementTable from "@/components/shared/MangementTable";
-import { IMenuItem } from "./menuItemsColumn";
 import { categoryColumns, ICategory } from "./categoryColumn";
 import AddNewCategoryModal from "./AddNewCategoryModal";
 import {
@@ -13,6 +12,7 @@ import {
   deleteCategory,
 } from "@/services/category/category.service";
 import { toast } from "sonner";
+import EditCategoryModal from "./EditCategoryModal";
 
 interface CategoryTableProps {
   menus: ICategory[];
@@ -37,6 +37,7 @@ const CategoryTable = ({
   );
   const [addCategory, setAddCategory] = useState(false);
   const [deleteCat, setDeleteCategory] = useState(false);
+  const [editCategory, setEditCategory] = useState(false);
 
   const handleRefresh = () => {
     startTransition(() => {
@@ -64,6 +65,7 @@ const CategoryTable = ({
   };
   const handleEdit = (category: ICategory) => {
     setEditingCategory(category);
+    setEditCategory(true);
   };
 
   const handleDelete = (category: ICategory) => {
@@ -73,14 +75,25 @@ const CategoryTable = ({
 
   const confirmDelete = async () => {
     if (!deletingCateogry) return;
-    const result = await deleteCategory(deletingCateogry.id!);
+    setDeleteCategory(false);
+    try {
+      const toastId = toast.loading("Deleting Category..");
+      const result = await deleteCategory(deletingCateogry.id!);
 
-    if (result.success) {
-      toast.success(result.message || "Category deleted successfully");
-      setDeletingCategory(null);
-      handleRefresh();
-    } else {
-      toast.error(result.message || "Category to delete Menu");
+      if (result.success) {
+        toast.success(result.message || "Category deleted successfully", {
+          id: toastId,
+        });
+        setDeletingCategory(null);
+        setDeleteCategory(false);
+        handleRefresh();
+      } else {
+        toast.error(result.message || "Category to delete Menu", {
+          id: toastId,
+        });
+      }
+    } catch (error) {
+      console.log("Category Deletion Error", error);
     }
   };
 
@@ -116,6 +129,13 @@ const CategoryTable = ({
         onConfirm={confirmDelete}
         title="Delete Category"
         description={`Are you sure you want to delete ${deletingCateogry?.name}? This action cannot be undone.`}
+      />
+
+      <EditCategoryModal
+        isOpen={editCategory}
+        onClose={() => setEditCategory(false)}
+        initialData={editingCategory}
+        onRefresh={handleRefresh}
       />
     </>
   );

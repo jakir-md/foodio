@@ -81,14 +81,17 @@ export default function AddNewItemModal({
     <Dialog open={open} onOpenChange={onClose}>
       <DialogTrigger asChild></DialogTrigger>
 
-      <DialogContent className="sm:max-w-125 p-6 bg-[#FAFAF9]">
+      <DialogContent className="sm:max-w-125  max-h-[90vh] flex flex-col p-6 bg-[#FAFAF9]">
         <DialogHeader className="mb-4">
           <DialogTitle className="text-xl font-bold text-[#13322B]">
             Add New Item
           </DialogTitle>
         </DialogHeader>
 
-        <form action={formAction} className="space-y-5">
+        <form
+          action={formAction}
+          className="overflow-y-auto overflow-none  custom-scrollbar space-y-5"
+        >
           <div className="grid grid-cols-2 gap-4">
             <Field className="space-y-1.5">
               <FieldLabel
@@ -100,6 +103,7 @@ export default function AddNewItemModal({
               <Input
                 id="name"
                 name="name"
+                placeholder="Enter Name"
                 defaultValue={state?.inputs?.name}
                 className="bg-white border-gray-200 focus-visible:ring-[#13322B]"
               />
@@ -118,6 +122,7 @@ export default function AddNewItemModal({
                 name="price"
                 type="number"
                 step="0.01"
+                placeholder="Enter Price"
                 defaultValue={state?.inputs?.price}
                 className="bg-white border-gray-200 focus-visible:ring-[#13322B]"
               />
@@ -160,6 +165,7 @@ export default function AddNewItemModal({
             <Textarea
               id="description"
               name="description"
+              placeholder="Enter Placeholder"
               defaultValue={state?.inputs?.description}
               className="min-h-25 bg-white border-gray-200 focus-visible:ring-[#13322B] resize-none"
             />
@@ -212,7 +218,7 @@ export default function AddNewItemModal({
           </Field>
 
           <div className="flex items-center justify-between pt-2">
-            <Field className="flex items-center gap-3">
+            <div className="flex items-center justify-between gap-3">
               <Switch
                 id="available"
                 checked={isAvailable}
@@ -230,7 +236,7 @@ export default function AddNewItemModal({
               >
                 Available for Order
               </FieldLabel>
-            </Field>
+            </div>
 
             <Button
               type="submit"

@@ -14,9 +14,11 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { logoutUser } from "@/services/auth/logoutUser";
 import CartModal from "../modules/cart/CartModal";
+import { useCartStore } from "@/store/useCartStore";
 
 export default function Navbar() {
   const pathname = usePathname();
+  const { items } = useCartStore();
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
   useEffect(() => {
     async function fetchInfo() {
@@ -89,7 +91,7 @@ export default function Navbar() {
               d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
             />
           </svg>
-          <span className="font-semibold">2</span>
+          <span className="font-semibold">{items.length}</span>
         </button>
         <CartModal isOpen={cartOpen} onClose={() => setCartOpen(false)} />
         {userInfo && userInfo.email ? (

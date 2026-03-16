@@ -56,7 +56,7 @@ export class CategoriesService {
     } catch (error: any) {
       if (error.code === "P2003") {
         throw new BadRequestException(
-          "Cannot delete this category because it still has menu items attached to it. Please reassign or delete those items first.",
+          "Cannot delete this category because it still has menu items attached to it.",
         );
       }
       throw error;

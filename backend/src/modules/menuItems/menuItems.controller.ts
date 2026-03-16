@@ -86,7 +86,10 @@ export class MenuItemsController {
     @UploadedFile() file: Express.Multer.File,
   ) {
     const parsedData = JSON.parse(body.data);
-    const imageUrl = file.path || parsedData.image;
+    let imageUrl = parsedData.image;
+    if (file) {
+      imageUrl = file.path;
+    }
     const productData = {
       name: parsedData.name,
       menuId: parsedData.menuId,
@@ -99,7 +102,7 @@ export class MenuItemsController {
     const result = await this.menuItemsService.updateItem(productData);
     return {
       success: true,
-      message: "Product created successfully",
+      message: "Menu updated successfully",
       data: result,
     };
   }

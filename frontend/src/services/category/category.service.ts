@@ -56,9 +56,10 @@ export const deleteCategory = async (categoryId: string): Promise<any> => {
   }
 };
 
-export const editCategory = async (): Promise<any> => {
+export const editCategory = async (payload: any): Promise<any> => {
   try {
-    const res = await serverFetch.patch("/categories", {
+    const res = await serverFetch.patch(`/categories/${payload.categoryId}`, {
+      body: JSON.stringify({ name: payload.name }),
       headers: {
         "Content-Type": "application/json",
       },
