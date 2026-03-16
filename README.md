@@ -1,4 +1,4 @@
-# Foodio - Premium Food Delivery Platform
+# Foodio - Food Delivery Platform
 
 Foodio is a full-stack food ordering and menu management platform. It features a seamless user experience for browsing and purchasing meals, alongside a robust admin dashboard for managing categories, menu items, and order statuses.
 
@@ -7,52 +7,41 @@ Foodio is a full-stack food ordering and menu management platform. It features a
 - **Live Demo (Frontend):** [foodio-xi.vercel.app](https://foodio-xi.vercel.app)
 - **Live API (Backend):** [foodio-jxlu.onrender.com](https://foodio-jxlu.onrender.com)
 
-## Tech Stack
+## 💻 Tech Stack
 
-- **Frontend:** Next.js (App Router), React, Tailwind CSS, Zustand (State Management), Shadcn UI
+- **Frontend:** Next.js (App Router), React, Tailwind CSS, Zustand, Shadcn UI
 - **Backend:** NestJS, TypeScript, Prisma ORM
 - **Database:** PostgreSQL (hosted on Neon)
 - **Authentication:** JWT & Bcrypt
 
 ---
 
-## Core Technical Implementations
+## ✨ Core Technical Implementations
 
-- `Modular UI Components:` Built highly reusable, isolated frontend components (like `TablePagination`, `SortingPopovers`, `ManagementTable`, `DeleteConfirmationDialog` and many more) that independently manage their own URL state and receive data via props.
+- **Modular UI Components:** Built highly reusable, isolated frontend components (like `TablePagination`, `SortingPopovers`, `ManagementTable`, and `DeleteConfirmationDialog`) that independently manage their own URL state and receive data via props.
+- **URL-Driven Architecture:** Offloaded searching, sorting, and pagination to PostgreSQL using Next.js `searchParams` and `useTransition`, keeping the UI instantly responsive without full page reloads.
+- **Secure Cart Calculations:** Enforced strict security by calculating cart totals exclusively on the NestJS backend using real database prices, preventing any malicious frontend manipulation.
+- **Optimized Database Pagination:** Slashed database execution time in half by utilizing `Promise.all` to execute Prisma's `findMany` and `count` queries concurrently for lightning-fast API responses.
+- **Protected UX Interceptors:** Created a seamless authentication flow that intercepts protected actions (like "Add to Cart") and triggers a state-preserving login modal instead of throwing jarring errors.
+- **Dynamic Cache Management:** Strategically managed Next.js App Router caching using `force-dynamic` on routes relying on cookies and live parameters to guarantee users always see real-time data.
+- **Automated Database Seeding:** Developed a comprehensive Prisma script (`npx prisma db seed`) that instantly populates the database with admin accounts, categories, and menu items for seamless local setup.
+- **Graceful Error Boundaries:** Implemented a custom administrative dashboard navigation system and branded Next.js `not-found.tsx` boundary pages to gracefully handle routing errors and elevate the UX.
 
-- `URL-Driven Architecture:` Offloaded searching, sorting, and pagination to PostgreSQL using Next.js `searchParams` and `useTransition`, keeping the UI instantly responsive without full page reloads.
+---
 
-- `Secure Cart Calculations:` Enforced strict security by calculating cart totals exclusively on the NestJS backend using real database prices, preventing any malicious frontend manipulation.
+## 🚀 Engineering Roadmap (Future Improvements)
 
-- `Optimized Database Pagination:` Slashed database execution time in half by utilizing Promise.all to execute Prisma's findMany and count queries concurrently for lightning-fast API responses.
+- **Soft Delete Architecture:** Implementing a strict soft delete pattern to preserve financial and historical data, preventing orphaned order records when administrative deletions occur.
+- **Inventory & Concurrency Engine:** Tying frontend quantity selectors directly to backend inventory checks to prevent out-of-stock orders during high-traffic periods.
+- **Event-Driven Processing:** Transitioning order processing to a RabbitMQ-backed event loop to decouple services and ensure zero-wait confirmation times for users.
+- **Containerization:** Dockerizing both frontend and backend environments to guarantee complete parity between local development, staging, and production.
+- **Advanced Security:** Integrating rate-limiting, Helmet.js, and strict CORS policies to harden the API against DDoS attacks and injection vulnerabilities.
+- **Rendering Optimization:** Fine-tuning Next.js rendering strategies (SSR, SSG, CSR) to squeeze out maximum performance and SEO benefits.
+- **Payment & Transaction Ledger:** Integrating SSLCommerz backed by a custom double-entry transaction ledger to maintain a mathematically perfect record of all platform revenue.
+- **Form Architecture:** Migrating complex administrative interfaces to React Hook Form and Zod to eliminate unnecessary re-renders and enforce strict client-side validation.
+- **UI/UX Polish:** Integrating Framer Motion for fluid micro-interactions and refining the global design system for a flawless mobile-first experience.
 
-- `Protected UX Interceptors:` Created a seamless authentication flow that intercepts protected actions (like "Add to Cart") and triggers a state-preserving login modal instead of throwing jarring errors.
-
-- `Dynamic Cache Management:` Strategically managed Next.js App Router caching using force-dynamic on routes relying on cookies and live parameters to guarantee users always see real-time data.
-
-- `Automated Database Seeding:` Developed a comprehensive Prisma script (npx prisma db seed) that instantly populates the database with admin accounts, categories, and menu items for seamless local setup.
-
-- `Graceful Error Boundaries:` Implemented a custom administrative dashboard navigation system and branded Next.js not-found.tsx boundary pages to gracefully handle routing errors and elevate the UX.
-
-## Future Improvements
-
-- I want to implement a strict Soft Delete pattern for our database. Right now, if an admin deletes a menu item, we risk orphaning old order records. Soft deleting will protect our financial and historical data.
-
-- My next major feature is an Inventory and Concurrency engine. I plan to add stock limits so the frontend quantity selector is directly tied to a backend inventory check, preventing users from ordering out-of-stock items during high-traffic periods.
-
-- Highly curious about implementing `event-driven architecture` using `rabbitmq` to make order processing lifecycle more efficient so that user should not wait seconds for getting confirmation.
-
-- Want to use `docker for containerization`. Work on my machine problem get solved.
-
-- For security I want to use `ratelimiting`, `helmetjs` and other steps to save my website from ddos attack and sql injection.
-
-- More precise `ssr`, `ssg` and `csr` can be used for lightening fast delivery.
-
-- To make the platform commercially viable, I am mapping out an SSLCommerz integration backed by a custom Transaction Ledger in the database to ensure we have a mathematically perfect record of all money entering the platform.
-
-- On the frontend, I want to migrate all complex admin forms to React Hook Form. This will drastically reduce re-renders during text input and allow me to implement complex validation schemas before the data ever hits my NestJS API.
-
-- There is still many UI/UX related issues, these will be resolved in the next upgrade. Also I want to use `framer motion or Gsap` for animation related UI improvements.
+---
 
 ## 🛠️ Local Setup & Installation
 
@@ -119,3 +108,10 @@ npm install
 ```bash
 npm run dev
 ```
+
+## 👨‍💻 Author
+
+**Md Jakir Hossain** *Full Stack Engineer* 🎓 B.Sc. in Computer Science & Engineering, Jahangirnagar University
+
+- **GitHub:** [@jakir-md](https://github.com/jakir-md)
+- **LinkedIn:** [Md Jakir Hossain](https://www.linkedin.com/in/jakir-md)
