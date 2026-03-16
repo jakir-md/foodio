@@ -46,15 +46,16 @@ npm run start:dev
 ```
 
 # 3. Frontend Setup
-Navigate to the frontend directory:
+ - Navigate to the frontend directory:
 ```bash
 cd frontend
 ```
-Intall Dependencies:
+ - Intall Dependencies:
 ```bash
 npm install
 ```
-Start the frontend development server
+ - Create a .env file in the root frontend folder resembles the .env.example. And then paste the env credentials for the frontend given in the email.
+ - Start the frontend development server
 ```bash
 npm run dev
 ```
